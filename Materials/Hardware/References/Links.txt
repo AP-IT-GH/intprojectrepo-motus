@@ -1,0 +1,1 @@
+about hte BL-module SPI connection, enable pin as slave select - https://www.electronicshub.org/hc-05-bluetooth-module/#Modes_of_Operation
