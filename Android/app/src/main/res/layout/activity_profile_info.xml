@@ -29,7 +29,7 @@
         android:layout_toEndOf="@+id/text_username"
         android:layout_toRightOf="@+id/text_username"
         android:background="@drawable/blackborder"
-        android:text="TextView" />
+        android:text="@string/text_input_username" />
 
     <Button
         android:id="@+id/button_edit_username"
@@ -70,7 +70,7 @@
         android:layout_toEndOf="@+id/text_email"
         android:layout_toRightOf="@+id/text_email"
         android:background="@drawable/blackborder"
-        android:text="TextView" />
+        android:text="@string/text_input_email" />
 
 
     <Button
@@ -92,12 +92,10 @@
     <Button
         android:id="@+id/button_change_password"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="54dp"
         android:layout_below="@+id/text_email"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="128dp"
-        android:layout_marginBottom="70dp"
+        android:layout_marginTop="64dp"
         android:text="@string/button_text_change_password" />
 
     <ImageView
@@ -108,10 +106,10 @@
         android:layout_alignParentRight="true"
         android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="164dp"
+        android:layout_marginTop="148dp"
         android:layout_marginEnd="108dp"
         android:layout_marginRight="108dp"
         android:layout_weight="1"
-        tools:srcCompat="@tools:sample/avatars[2]" />
+        android:src="@mipmap/standardprofilepicture" />
 
 </RelativeLayout>
