@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Motus</string>
+    <string name="data">Data:</string>
+    <string name="show_data">Show Data</string>
+    <string name="add_data">Add Data</string>
+    <string name="dummydatashowactivity">DummyDataShowActivity</string>
 </resources>
