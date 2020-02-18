@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "867431557408",
+    "firebase_url": "https://motus-bfbe6.firebaseio.com",
+    "project_id": "motus-bfbe6",
+    "storage_bucket": "motus-bfbe6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867431557408:android:ca3857ad27149e491c8f45",
+        "android_client_info": {
+          "package_name": "com.example.motus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "867431557408-gcc36fdippopek2namo0gh07srgrccjc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.motus",
+            "certificate_hash": "f35e975181a917ef24d1deed07b202f0d8558a29"
+          }
+        },
+        {
+          "client_id": "867431557408-m93jgn42dlhnaa8n7gi1v113qjiv1s1r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBJcwdfiU940ZFiB4JSn4U_tengZrVXQZQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "867431557408-m93jgn42dlhnaa8n7gi1v113qjiv1s1r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
