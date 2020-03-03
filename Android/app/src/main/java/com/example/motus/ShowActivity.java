@@ -225,14 +225,6 @@ public class ShowActivity extends AppCompatActivity {
             }
         }
 
-        public String bin2String(byte[] array) {
-            String result = "";
-            for (int i = 0; i < array.length; i++) {
-                result += String.fromCharCode(parseInt(array[i], 2));
-            }
-            return result;
-        }
-
         /* Call this from the main activity to shutdown the connection */
         public void cancel() {
             try {
