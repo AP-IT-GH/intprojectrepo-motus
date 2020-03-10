@@ -18,4 +18,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(this,CreateDummyData.class);
         startActivity(intent);
     }
+
+    public void launchGetDataActivity(View view) {
+        Intent intent = new Intent(this,GetDataActivity.class);
+        startActivity(intent);
+    }
 }

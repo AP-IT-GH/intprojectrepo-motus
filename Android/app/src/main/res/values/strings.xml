@@ -8,5 +8,7 @@
     <string name="status">Status:</string>
     <string name="bluetooth_status"><![CDATA[<Bluetooth Status>]]></string>
     <string name="send_data">Send data</string>
+    <string name="getdataactivity">getDataActivity</string>
+    <string name="get_data">Get Data</string>
 
 </resources>
