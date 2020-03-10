@@ -90,14 +90,14 @@ public class LoginActivity  extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             Toast.makeText(LoginActivity.this, "Signed In, Great Success", Toast.LENGTH_SHORT).show();
-            FirebaseGoogleAuth(account);
+            firebaseGoogleAuth(account);
         }
         catch (ApiException e){
             Toast.makeText(LoginActivity.this, "Sign In Failure", Toast.LENGTH_SHORT).show();
-            FirebaseGoogleAuth(null);
+            firebaseGoogleAuth(null);
         }
     }
-    private  void FirebaseGoogleAuth(GoogleSignInAccount accountGoogle){
+    private  void firebaseGoogleAuth(GoogleSignInAccount accountGoogle){
         AuthCredential authCredential = GoogleAuthProvider.getCredential(accountGoogle.getIdToken(), null);
         mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
