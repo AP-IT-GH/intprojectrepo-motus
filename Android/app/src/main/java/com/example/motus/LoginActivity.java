@@ -24,6 +24,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class LoginActivity  extends AppCompatActivity {
     private SignInButtonImpl signInButton;
@@ -32,6 +34,8 @@ public class LoginActivity  extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Button btnSignOut;
     private int RC_SIGN_IN = 1;
+    FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference newRef = database.getReference("users");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +45,7 @@ public class LoginActivity  extends AppCompatActivity {
         signInButton = findViewById(R.id.sign_in_bt);
         mAuth = FirebaseAuth.getInstance();
         btnSignOut = findViewById(R.id.sign_out_bt);
+
 
         GoogleSignInOptions signInOptions =  new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -115,10 +120,15 @@ public class LoginActivity  extends AppCompatActivity {
         if (accountGoogle != null){
             String personName = accountGoogle.getDisplayName();
             String personGivenName = accountGoogle.getGivenName();
-            String personFamilyName = accountGoogle.getEmail();
             String personEmail = accountGoogle.getEmail();
             Uri personPhoto = accountGoogle.getPhotoUrl();
-
+            String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
+            newRef.child(currentuser)
+                    .child("name").setValue(personName);
+            newRef.child(currentuser)
+                    .child("uid").setValue(currentuser);
+            newRef.child(currentuser)
+                    .child("mail").setValue(personEmail);
             Toast.makeText(LoginActivity.this, personName + personEmail, Toast.LENGTH_SHORT).show();
         }
     }
