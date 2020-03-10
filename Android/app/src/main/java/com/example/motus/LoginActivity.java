@@ -116,12 +116,11 @@ public class LoginActivity  extends AppCompatActivity {
     private void updateUI(FirebaseUser userGoogle){
         btnSignOut.setVisibility(View.VISIBLE);
 
-        GoogleSignInAccount accountGoogle = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        if (accountGoogle != null){
-            String personName = accountGoogle.getDisplayName();
-            String personGivenName = accountGoogle.getGivenName();
-            String personEmail = accountGoogle.getEmail();
-            Uri personPhoto = accountGoogle.getPhotoUrl();
+
+        if (userGoogle != null){
+            String personName = userGoogle.getDisplayName();
+            String personEmail = userGoogle.getEmail();
+            Uri personPhoto = userGoogle.getPhotoUrl();
             String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
             newRef.child(currentuser)
                     .child("name").setValue(personName);
