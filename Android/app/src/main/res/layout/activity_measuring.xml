@@ -4,15 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DummyButton">
+    tools:context=".MeasuringActivity">
 
     <TextView
-        android:id="@+id/text_start_measuring"
+        android:id="@+id/text_stop_measuring"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
 
-        android:text="@string/text_start_measuring"
+        android:text="Measuring..."
 
         android:textSize="40sp"
         android:fontFamily=""
@@ -31,15 +31,15 @@
         android:contentDescription="Logo MOTUS"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_start_measuring"
+        app:layout_constraintTop_toBottomOf="@+id/text_stop_measuring"
         app:srcCompat="@android:drawable/presence_online" />
 
     <Button
-        android:id="@+id/start_measuring_button"
+        android:id="@+id/stop_measuring_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="@string/button_text_start"
+        android:text="@string/button_text_cancel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/image_logo" />

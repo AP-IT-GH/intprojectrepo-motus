@@ -5,4 +5,9 @@
     <string name="button_text_change_password">Change Password</string>
     <string name="text_input_email">BernieSander@4Prez.usa</string>
     <string name="text_input_username">Bernie Sanders</string>
+
+
+    <string name="text_start_measuring">Start Measuring</string>
+    <string name="button_text_start">Start</string>
+    <string name="button_text_cancel">Cancel</string>
 </resources>
