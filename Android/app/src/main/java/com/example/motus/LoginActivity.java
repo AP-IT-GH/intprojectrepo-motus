@@ -120,12 +120,11 @@ public class LoginActivity  extends AppCompatActivity {
         if (accountGoogle != null){
             String personName = accountGoogle.getDisplayName();
             String personGivenName = accountGoogle.getGivenName();
-            String personFamilyName = accountGoogle.getEmail();
             String personEmail = accountGoogle.getEmail();
             Uri personPhoto = accountGoogle.getPhotoUrl();
             String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
             newRef.child(currentuser)
-                    .child("name").setValue(personGivenName+personFamilyName);
+                    .child("name").setValue(personName);
             newRef.child(currentuser)
                     .child("uid").setValue(currentuser);
             newRef.child(currentuser)
