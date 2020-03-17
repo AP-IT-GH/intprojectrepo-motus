@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/assistantswitch"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Home" />
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Profile" />
+    <item
+        android:id="@+id/results"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Results" />
+    <item
+        android:id="@+id/voiceswitch"
+        android:icon="@drawable/ic_launcher_foreground"
+        android:title="Injuries" />
+    <item
+        android:id="@+id/settings"
+        android:title="Settings">
+        <menu>
+            <item
+                android:id="@+id/connect"
+                android:icon="@drawable/ic_launcher_foreground"
+                android:title="Connect to device" />
+        </menu>
+    </item>
+</menu>

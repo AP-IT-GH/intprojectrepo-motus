@@ -11,4 +11,7 @@
     <string name="text_start_measuring">Start Measuring</string>
     <string name="button_text_start">Start</string>
     <string name="button_text_cancel">Cancel</string>
+    <string name="value" />
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
