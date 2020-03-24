@@ -108,7 +108,7 @@ public class LoginActivity  extends NavigationMenu {
                     Toast.makeText(LoginActivity.this, "Successful", Toast.LENGTH_SHORT).show();
                     FirebaseUser user = mAuth.getCurrentUser();
                     updateUI(user);
-                    sendMessage(user);
+
                 }else{
                     Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                     updateUI(null);
@@ -118,11 +118,15 @@ public class LoginActivity  extends NavigationMenu {
     }
 
     private void sendMessage(FirebaseUser userGoogle){
-
-        DatabaseReference newRefMessage = database.getReference("data");
+        FirebaseDatabase databaseMessage = FirebaseDatabase.getInstance();
+        DatabaseReference newRefMessage = databaseMessage.getReference("data");
         String currentUser = userGoogle.getUid();
         newRefMessage.child(currentUser)
                 .child("test").setValue("Hello Database! MAX test");
+        newRefMessage.child(currentUser)
+                .child("angle").setValue("-2");
+        newRefMessage.child(currentUser)
+                .child("time").setValue("0.1");
         Toast.makeText(LoginActivity.this, "send message", Toast.LENGTH_SHORT).show();
     }
 
