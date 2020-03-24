@@ -37,6 +37,7 @@ public class LoginActivity  extends NavigationMenu {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference newRef = database.getReference("users");
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,11 +71,12 @@ public class LoginActivity  extends NavigationMenu {
                 btnSignOut.setVisibility(View.INVISIBLE);
             }
         });
+
+
     }
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent,RC_SIGN_IN);
-
     }
 
     @Override
@@ -106,6 +108,7 @@ public class LoginActivity  extends NavigationMenu {
                     Toast.makeText(LoginActivity.this, "Successful", Toast.LENGTH_SHORT).show();
                     FirebaseUser user = mAuth.getCurrentUser();
                     updateUI(user);
+                    sendMessage(user);
                 }else{
                     Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                     updateUI(null);
@@ -113,6 +116,16 @@ public class LoginActivity  extends NavigationMenu {
             }
         });
     }
+
+    private void sendMessage(FirebaseUser userGoogle){
+
+        DatabaseReference newRefMessage = database.getReference("data");
+        String currentUser = userGoogle.getUid();
+        newRefMessage.child(currentUser)
+                .child("test").setValue("Hello Database! MAX test");
+        Toast.makeText(LoginActivity.this, "send message", Toast.LENGTH_SHORT).show();
+    }
+
     private void updateUI(FirebaseUser userGoogle){
         btnSignOut.setVisibility(View.VISIBLE);
 
@@ -121,14 +134,16 @@ public class LoginActivity  extends NavigationMenu {
             String personName = userGoogle.getDisplayName();
             String personEmail = userGoogle.getEmail();
             Uri personPhoto = userGoogle.getPhotoUrl();
-            String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            newRef.child(currentuser)
+            String currentUser = userGoogle.getUid();
+            newRef.child(currentUser)
                     .child("name").setValue(personName);
-            newRef.child(currentuser)
-                    .child("uid").setValue(currentuser);
-            newRef.child(currentuser)
+            newRef.child(currentUser)
+                    .child("uid").setValue(currentUser);
+            newRef.child(currentUser)
                     .child("mail").setValue(personEmail);
             Toast.makeText(LoginActivity.this, personName + personEmail, Toast.LENGTH_SHORT).show();
+
         }
+
     }
 }
