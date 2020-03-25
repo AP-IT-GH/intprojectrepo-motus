@@ -24,8 +24,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity  extends NavigationMenu {
     private SignInButtonImpl signInButton;
@@ -34,8 +37,12 @@ public class LoginActivity  extends NavigationMenu {
     private FirebaseAuth mAuth;
     private Button btnSignOut;
     private int RC_SIGN_IN = 1;
+    int Teller = 0;
+    Data data;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference newRef = database.getReference("users");
+    FirebaseDatabase databaseMessage = FirebaseDatabase.getInstance();
+    DatabaseReference newRefMessage = databaseMessage.getReference("data");
 
 
     @Override
@@ -46,7 +53,7 @@ public class LoginActivity  extends NavigationMenu {
         signInButton = findViewById(R.id.sign_in_bt);
         mAuth = FirebaseAuth.getInstance();
         btnSignOut = findViewById(R.id.sign_out_bt);
-
+        data = new Data();
 
         GoogleSignInOptions signInOptions =  new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -69,6 +76,7 @@ public class LoginActivity  extends NavigationMenu {
                 mGoogleSignInClient.signOut();
                 Toast.makeText(LoginActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
                 btnSignOut.setVisibility(View.INVISIBLE);
+                Teller = 0;
             }
         });
 
@@ -108,7 +116,7 @@ public class LoginActivity  extends NavigationMenu {
                     Toast.makeText(LoginActivity.this, "Successful", Toast.LENGTH_SHORT).show();
                     FirebaseUser user = mAuth.getCurrentUser();
                     updateUI(user);
-
+                    sendMessage(user);
                 }else{
                     Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                     updateUI(null);
@@ -118,16 +126,28 @@ public class LoginActivity  extends NavigationMenu {
     }
 
     private void sendMessage(FirebaseUser userGoogle){
-        FirebaseDatabase databaseMessage = FirebaseDatabase.getInstance();
-        DatabaseReference newRefMessage = databaseMessage.getReference("data");
         String currentUser = userGoogle.getUid();
-        newRefMessage.child(currentUser)
-                .child("test").setValue("Hello Database! MAX test");
-        newRefMessage.child(currentUser)
-                .child("angle").setValue("-2");
-        newRefMessage.child(currentUser)
-                .child("time").setValue("0.1");
-        Toast.makeText(LoginActivity.this, "send message", Toast.LENGTH_SHORT).show();
+        data.setAngle("45");
+        data.setTime("0.1");
+        data.setUid(currentUser);
+        newRefMessage.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int itemsData;
+                itemsData =(int)dataSnapshot.getChildrenCount();
+                String temp = String.valueOf(itemsData);
+                Toast.makeText(LoginActivity.this, temp, Toast.LENGTH_SHORT).show();
+                if (Teller<1){
+                    newRefMessage.child(temp).setValue(data);
+                }
+                Teller = Teller + 1;
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                String temp = String.valueOf(databaseError);
+                Toast.makeText(LoginActivity.this, temp, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void updateUI(FirebaseUser userGoogle){
