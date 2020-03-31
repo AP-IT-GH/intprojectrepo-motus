@@ -36,6 +36,7 @@ public class LoginActivity  extends NavigationMenu {
     private String TAG="LoginActivity";
     private FirebaseAuth mAuth;
     private Button btnSignOut;
+    private Button btnSendData;
     private int RC_SIGN_IN = 1;
     int Teller = 0;
     Data data;
@@ -53,6 +54,7 @@ public class LoginActivity  extends NavigationMenu {
         signInButton = findViewById(R.id.sign_in_bt);
         mAuth = FirebaseAuth.getInstance();
         btnSignOut = findViewById(R.id.sign_out_bt);
+        btnSendData = findViewById(R.id.send_data_id);
         data = new Data();
 
         GoogleSignInOptions signInOptions =  new GoogleSignInOptions
@@ -70,13 +72,23 @@ public class LoginActivity  extends NavigationMenu {
             }
         });
 
+        btnSendData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (data.getUid() != null)
+                {
+                    sendMessage();
+                    Toast.makeText(LoginActivity.this, "Send data button SUCCESS", Toast.LENGTH_SHORT).show();
+                    Teller = 0;
+                }
+            }
+        });
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mGoogleSignInClient.signOut();
                 Toast.makeText(LoginActivity.this, "Logged out", Toast.LENGTH_SHORT).show();
                 btnSignOut.setVisibility(View.INVISIBLE);
-                Teller = 0;
             }
         });
 
@@ -116,7 +128,8 @@ public class LoginActivity  extends NavigationMenu {
                     Toast.makeText(LoginActivity.this, "Successful", Toast.LENGTH_SHORT).show();
                     FirebaseUser user = mAuth.getCurrentUser();
                     updateUI(user);
-                    sendMessage(user);
+                    String currentUser = user.getUid();
+                    data.setUid(currentUser);
                 }else{
                     Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                     updateUI(null);
@@ -125,11 +138,9 @@ public class LoginActivity  extends NavigationMenu {
         });
     }
 
-    private void sendMessage(FirebaseUser userGoogle){
-        String currentUser = userGoogle.getUid();
+    private void sendMessage(){
         data.setAngle("45");
         data.setTime("0.1");
-        data.setUid(currentUser);
         newRefMessage.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
