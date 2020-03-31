@@ -45,7 +45,25 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
 
         DBData = findViewById(R.id.liveData);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        dataRef = database.getReference(DatabaseDataReference).child("dummy_data");
+        dataRef = database.getReference(DatabaseDataReference);
+        dataRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG,"snapshot:" + dataSnapshot.toString());
+                ArrayList<String> data = (ArrayList<String>) dataSnapshot.getValue();
+                dataLength = data.size();
+                Log.d(TAG,"length: " + dataLength);
+                initialiseSpinner();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                System.out.println("The read failed: " + databaseError.getCode());
+            }
+        });
+
+
+        /*
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -62,7 +80,8 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         });
-        currRef = dataRef.child("");
+        */
+        currRef = dataRef;
         initialiseSpinner();
         event = new ValueEventListener() {
             @Override
@@ -91,13 +110,10 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         userChoice = null;
         userChoice = findViewById(R.id.spinner);
         userChoice.setOnItemSelectedListener(this);
-
-        Log.d(TAG,"initialise called");
-
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-        for(int i = 1;i<dataLength+1;i++){
-            String toAdd = "testdata";
+        for(int i = 0;i<dataLength;i++){
+            String toAdd = "";
             categories.add(toAdd+i);
         }
 
