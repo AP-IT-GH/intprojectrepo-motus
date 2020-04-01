@@ -92,7 +92,8 @@ public class LoginActivity  extends NavigationMenu {
             }
         });
 
-
+        Intent intent = new Intent(this,ProfileInfo.class);
+        startActivity(intent);
     }
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
