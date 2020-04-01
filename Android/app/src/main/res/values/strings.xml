@@ -11,18 +11,4 @@
     <string name="getdataactivity">getDataActivity</string>
     <string name="get_data">Get Data</string>
 
-    <string name="sign_out">Sign Out</string>
-    <string name="text_username">Name:</string>
-    <string name="text_email">Email:</string>
-    <string name="button_text_change_password">Change Password</string>
-    <string name="text_input_email">BernieSander@4Prez.usa</string>
-    <string name="text_input_username">Bernie Sanders</string>
-
-
-    <string name="text_start_measuring">Start Measuring</string>
-    <string name="button_text_start">Start</string>
-    <string name="button_text_cancel">Cancel</string>
-    <string name="value" />
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
 </resources>
