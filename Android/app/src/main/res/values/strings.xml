@@ -15,4 +15,15 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="send_data">Send Data</string>
+    <string name="data">Data:</string>
+    <string name="show_data">Show Data</string>
+    <string name="add_data">Add Data</string>
+    <string name="dummydatashowactivity">DummyDataShowActivity</string>
+    <string name="disclaimer">Click on the device you wish to connect to. If you cannot see the correct device or are unsure which device is yours, try closing the app and pairing your devices in the bluetooth settings on your device.</string>
+    <string name="status">Status:</string>
+    <string name="bluetooth_status"><![CDATA[<Bluetooth Status>]]></string>
+    <string name="send_data">Send data</string>
+    <string name="getdataactivity">getDataActivity</string>
+    <string name="get_data">Get Data</string>
+
 </resources>
