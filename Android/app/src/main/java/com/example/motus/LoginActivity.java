@@ -128,12 +128,14 @@ public class LoginActivity  extends NavigationMenu {
                 if (task.isSuccessful()){
                     Toast.makeText(LoginActivity.this, "Successful", Toast.LENGTH_SHORT).show();
                     FirebaseUser user = mAuth.getCurrentUser();
-                    updateUI(user);
+                    updateUI();
+                    loginUser(user);
                     String currentUser = user.getUid();
                     data.setUid(currentUser);
                 }else{
                     Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
-                    updateUI(null);
+                    updateUI();
+
                 }
             }
         });
@@ -161,11 +163,8 @@ public class LoginActivity  extends NavigationMenu {
             }
         });
     }
-
-    private void updateUI(FirebaseUser userGoogle){
-        btnSignOut.setVisibility(View.VISIBLE);
-
-
+    private  void loginUser(FirebaseUser userGoogle)
+    {
         if (userGoogle != null){
             String personName = userGoogle.getDisplayName();
             String personEmail = userGoogle.getEmail();
@@ -181,5 +180,9 @@ public class LoginActivity  extends NavigationMenu {
 
         }
 
+
+    }
+    private void updateUI(){
+        btnSignOut.setVisibility(View.VISIBLE);
     }
 }

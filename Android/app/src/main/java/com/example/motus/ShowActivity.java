@@ -63,14 +63,17 @@ public class ShowActivity extends AppCompatActivity {
         lijst = intent.getStringArrayListExtra("dataList");
         final TextView box = findViewById(R.id.dataBox);
         String data = "";
-        for(int i = 0;i<lijst.size();i++){
-            data += lijst.get(i);
-            data += "\n";
+        if (lijst != null) {
+            for(int i = 0;i<lijst.size();i++){
+                data += lijst.get(i);
+                data += "\n";
+            }
+            if(data==""){
+                data = "no data found.";
+            }
+            box.setText(data);
         }
-        if(data==""){
-            data = "no data found.";
-        }
-        box.setText(data);
+
 
         mBluetoothStatus = findViewById(R.id.bluetoothStatus);
 
@@ -116,19 +119,19 @@ public class ShowActivity extends AppCompatActivity {
             Toast.makeText(getApplicationContext(),"Bluetooth device not found!",Toast.LENGTH_SHORT).show();
         }
 
-        bluetoothOn();
-        while(!mBTAdapter.isEnabled()){
+        //bluetoothOn();
+        //while(!mBTAdapter.isEnabled()){
 
-        }
-        listPairedDevices();
+        //}
+        //listPairedDevices();
 
         /*
         ConnectThread mConnectThread = new ConnectThread();
         mConnectThread.start();
         */
 
-        AcceptThread mAcceptThread = new AcceptThread();
-        mAcceptThread.start();
+        //AcceptThread mAcceptThread = new AcceptThread();
+        //mAcceptThread.start();
 
     }
 

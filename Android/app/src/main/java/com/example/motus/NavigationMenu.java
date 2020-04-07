@@ -58,14 +58,21 @@ public class NavigationMenu extends AppCompatActivity {
                 ShowInfo();
                 return false;
             }
-        });;
+        });
         nv.getMenu().findItem(R.id.results).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 ShowResults();
                 return false;
             }
-        });;
+        });
+        nv.getMenu().findItem(R.id.login).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                ShowLogin();
+                return false;
+            }
+        });
     }
 
     @Override
@@ -83,6 +90,10 @@ public class NavigationMenu extends AppCompatActivity {
     }
     public void ShowResults(){
         Intent intent = new Intent(this, ResultsActivity.class);
+        startActivity(intent);
+    }
+    public void ShowLogin(){
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 }
