@@ -13,6 +13,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -37,12 +39,18 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
     private DatabaseReference dataRef;
     private ValueEventListener event;
     private int dataLength = 5;
+    private String UID;
+
+    private FirebaseUser mUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_data);
 
+        mUser = FirebaseAuth.getInstance().getCurrentUser();
+        UID = mUser.getUid();
+        Log.d(TAG,UID);
         DBData = findViewById(R.id.liveData);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         dataRef = database.getReference(DatabaseDataReference);
@@ -90,9 +98,14 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
                 // whenever data at this location is updated.
                 HashMap<String,String> data = (HashMap<String,String>) dataSnapshot.getValue();
                 String value = "";
-                value += data.get(dataPoint1) + "\n";
-                value += data.get(dataPoint2) + "\n";
-                value += data.get(dataPoint3) + "\n";
+                if(data.get(dataPoint3).equals(UID)){
+                    value += data.get(dataPoint1) + "\n";
+                    value += data.get(dataPoint2) + "\n";
+                    value += data.get(dataPoint3) + "\n";
+                }else{
+                    value += "Incorrect UID";
+                }
+
                 DBData.setText(value);
                 Log.d(TAG, "Value is: " + value);
             }
@@ -140,9 +153,13 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
                 // whenever data at this location is updated.
                 HashMap<String,String> data = (HashMap<String,String>) dataSnapshot.getValue();
                 String value = "";
-                value += data.get(dataPoint1) + "\n";
-                value += data.get(dataPoint2) + "\n";
-                value += data.get(dataPoint3) + "\n";
+                if(data.get(dataPoint3).equals(UID)){
+                    value += data.get(dataPoint1) + "\n";
+                    value += data.get(dataPoint2) + "\n";
+                    value += data.get(dataPoint3) + "\n";
+                }else{
+                    value += "Incorrect UID";
+                }
                 DBData.setText(value);
                 Log.d(TAG, "Value is: " + value);
             }
