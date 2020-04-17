@@ -8,6 +8,21 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+    <Button
+        android:id="@+id/send_data_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="304dp"
+        android:layout_marginBottom="189dp"
+        android:text="@string/send_data"
+        app:layout_constraintBottom_toTopOf="@+id/sign_out_bt"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.455" />
+
     <com.google.android.gms.common.internal.SignInButtonImpl
         android:id="@+id/sign_in_bt"
         android:layout_width="wrap_content"

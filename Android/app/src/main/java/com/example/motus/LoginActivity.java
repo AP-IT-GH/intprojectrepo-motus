@@ -24,18 +24,27 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
-public class LoginActivity  extends AppCompatActivity {
+public class LoginActivity  extends NavigationMenu {
     private SignInButtonImpl signInButton;
     private GoogleSignInClient mGoogleSignInClient;
     private String TAG="LoginActivity";
     private FirebaseAuth mAuth;
     private Button btnSignOut;
+    private Button btnSendData;
     private int RC_SIGN_IN = 1;
+    int Teller = 0;
+    Data data;
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference newRef = database.getReference("users");
+    FirebaseDatabase databaseMessage = FirebaseDatabase.getInstance();
+    DatabaseReference newRefMessage = databaseMessage.getReference("data");
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +54,8 @@ public class LoginActivity  extends AppCompatActivity {
         signInButton = findViewById(R.id.sign_in_bt);
         mAuth = FirebaseAuth.getInstance();
         btnSignOut = findViewById(R.id.sign_out_bt);
-
+        btnSendData = findViewById(R.id.send_data_id);
+        data = new Data();
 
         GoogleSignInOptions signInOptions =  new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -62,6 +72,17 @@ public class LoginActivity  extends AppCompatActivity {
             }
         });
 
+        btnSendData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (data.getUid() != null)
+                {
+                    sendMessage();
+                    Toast.makeText(LoginActivity.this, "Send data button SUCCESS", Toast.LENGTH_SHORT).show();
+                    Teller = 0;
+                }
+            }
+        });
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -70,11 +91,13 @@ public class LoginActivity  extends AppCompatActivity {
                 btnSignOut.setVisibility(View.INVISIBLE);
             }
         });
+
+        Intent intent = new Intent(this,ProfileInfo.class);
+        startActivity(intent);
     }
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent,RC_SIGN_IN);
-
     }
 
     @Override
@@ -90,14 +113,14 @@ public class LoginActivity  extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             Toast.makeText(LoginActivity.this, "Signed In, Great Success", Toast.LENGTH_SHORT).show();
-            FirebaseGoogleAuth(account);
+            firebaseGoogleAuth(account);
         }
         catch (ApiException e){
             Toast.makeText(LoginActivity.this, "Sign In Failure", Toast.LENGTH_SHORT).show();
-            FirebaseGoogleAuth(null);
+            firebaseGoogleAuth(null);
         }
     }
-    private  void FirebaseGoogleAuth(GoogleSignInAccount accountGoogle){
+    private  void firebaseGoogleAuth(GoogleSignInAccount accountGoogle){
         AuthCredential authCredential = GoogleAuthProvider.getCredential(accountGoogle.getIdToken(), null);
         mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
             @Override
@@ -106,6 +129,8 @@ public class LoginActivity  extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, "Successful", Toast.LENGTH_SHORT).show();
                     FirebaseUser user = mAuth.getCurrentUser();
                     updateUI(user);
+                    String currentUser = user.getUid();
+                    data.setUid(currentUser);
                 }else{
                     Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                     updateUI(null);
@@ -113,23 +138,48 @@ public class LoginActivity  extends AppCompatActivity {
             }
         });
     }
+
+    private void sendMessage(){
+        data.setAngle("45");
+        data.setTime("0.1");
+        newRefMessage.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                int itemsData;
+                itemsData =(int)dataSnapshot.getChildrenCount();
+                String temp = String.valueOf(itemsData);
+                Toast.makeText(LoginActivity.this, temp, Toast.LENGTH_SHORT).show();
+                if (Teller<1){
+                    newRefMessage.child(temp).setValue(data);
+                }
+                Teller = Teller + 1;
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                String temp = String.valueOf(databaseError);
+                Toast.makeText(LoginActivity.this, temp, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
     private void updateUI(FirebaseUser userGoogle){
         btnSignOut.setVisibility(View.VISIBLE);
 
-        GoogleSignInAccount accountGoogle = GoogleSignIn.getLastSignedInAccount(getApplicationContext());
-        if (accountGoogle != null){
-            String personName = accountGoogle.getDisplayName();
-            String personGivenName = accountGoogle.getGivenName();
-            String personEmail = accountGoogle.getEmail();
-            Uri personPhoto = accountGoogle.getPhotoUrl();
-            String currentuser = FirebaseAuth.getInstance().getCurrentUser().getUid();
-            newRef.child(currentuser)
+
+        if (userGoogle != null){
+            String personName = userGoogle.getDisplayName();
+            String personEmail = userGoogle.getEmail();
+            Uri personPhoto = userGoogle.getPhotoUrl();
+            String currentUser = userGoogle.getUid();
+            newRef.child(currentUser)
                     .child("name").setValue(personName);
-            newRef.child(currentuser)
-                    .child("uid").setValue(currentuser);
-            newRef.child(currentuser)
+            newRef.child(currentUser)
+                    .child("uid").setValue(currentUser);
+            newRef.child(currentUser)
                     .child("mail").setValue(personEmail);
             Toast.makeText(LoginActivity.this, personName + personEmail, Toast.LENGTH_SHORT).show();
+
         }
+
     }
 }
