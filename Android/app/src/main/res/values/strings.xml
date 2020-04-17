@@ -1,13 +1,21 @@
 <resources>
     <string name="app_name">Motus</string>
     <string name="sign_out">Sign Out</string>
+
+    //Profile Screen Variables
+    <string name="Username">Bernie Sanders</string>
+    <string name="Email">YourEmail@somethingmail.com</string>
+
     <string name="text_username">Name:</string>
     <string name="text_email">Email:</string>
-    <string name="button_text_change_password">Change Password</string>
+    <string name="button_text_change_information">Edit Profile</string>
+    <string name="button_text_confirm_change">Confirm changes</string>
+
     <string name="text_input_email">BernieSander@4Prez.usa</string>
     <string name="text_input_username">Bernie Sanders</string>
 
 
+    //Measuring variables
     <string name="text_start_measuring">Start Measuring</string>
     <string name="button_text_start">Start</string>
     <string name="button_text_cancel">Cancel</string>

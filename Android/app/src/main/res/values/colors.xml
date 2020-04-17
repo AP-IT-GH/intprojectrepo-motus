@@ -3,4 +3,11 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+
+    <color name="White">#FFFFFF</color>
+    <color name="Black">#000000</color>
+
+    //Profile Screen
+    <color name="startYellow">#FFC800</color>
+    <color name="endYellow">#EB9C00</color>
 </resources>
