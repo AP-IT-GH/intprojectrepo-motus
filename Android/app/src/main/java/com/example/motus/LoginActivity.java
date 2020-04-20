@@ -107,10 +107,16 @@ public class LoginActivity  extends NavigationMenu {
         });
 
         //sign up email
-        signUP.setOnClickListener(new View.OnClickListener() {
+        /*signUP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signUPMail();
+            }
+        });*/
+        signUP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowRegister();
             }
         });
 
@@ -286,5 +292,10 @@ public class LoginActivity  extends NavigationMenu {
 
         }
 
+    }
+
+    public void ShowRegister(){
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
     }
 }
