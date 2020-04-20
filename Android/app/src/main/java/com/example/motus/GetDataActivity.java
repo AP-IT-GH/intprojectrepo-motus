@@ -1,5 +1,6 @@
 package com.example.motus;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -19,27 +20,36 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Set;
+
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class GetDataActivity extends AppCompatActivity implements OnItemSelectedListener{
 
     private Spinner userChoice;
-    private String TAG = "firebase";
+    private String TAG = "firebasedebug";
     private TextView DBData;
     private String DatabaseDataReference = "data";
     private String dataPoint1 = "angle";
     private String dataPoint2 = "time";
     private String dataPoint3 = "uid";
     private DatabaseReference currRef;
+    private DatabaseReference newRef;
     private DatabaseReference dataRef;
+    private Query databaseRef;
     private ValueEventListener event;
-    private int dataLength = 5;
+    private Set<String> keySet;
     private String UID;
+
+    private HashMap<String,HashMap<String,String>> dataArray;
 
     private FirebaseUser mUser;
 
@@ -54,6 +64,7 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         DBData = findViewById(R.id.liveData);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         dataRef = database.getReference(DatabaseDataReference);
+        /*
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -69,7 +80,7 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-
+        */
 
         /*
         dataRef.addValueEventListener(new ValueEventListener() {
@@ -90,33 +101,24 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         });
         */
         currRef = dataRef;
+        currRef.orderByChild("uid").equalTo(UID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot){
+                Log.d(TAG,"snapshot:" + dataSnapshot.toString());
+                Log.d(TAG,"snapshot2:" + dataSnapshot.getValue().toString());
+                HashMap<String,HashMap<String,String>> data = (HashMap<String,HashMap<String,String>>) dataSnapshot.getValue();
+                dataArray = data;
+                keySet = data.keySet();
+                Log.d(TAG,"length: " + keySet.toString());
+                initialiseSpinner();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
         initialiseSpinner();
-        event = new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                HashMap<String,String> data = (HashMap<String,String>) dataSnapshot.getValue();
-                String value = "";
-                if(data.get(dataPoint3).equals(UID)){
-                    value += data.get(dataPoint1) + "\n";
-                    value += data.get(dataPoint2) + "\n";
-                    value += data.get(dataPoint3) + "\n";
-                }else{
-                    value += "Incorrect UID";
-                }
-
-                DBData.setText(value);
-                Log.d(TAG, "Value is: " + value);
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        };
-
     }
 
     private void initialiseSpinner() {
@@ -125,9 +127,13 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         userChoice.setOnItemSelectedListener(this);
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-        for(int i = 0;i<dataLength;i++){
-            String toAdd = "";
-            categories.add(toAdd+i);
+        if(keySet==null){
+            categories.add("");
+        }else{
+            for(String key: keySet){
+                Log.d(TAG,"key: " + key);
+                categories.add(key);
+            }
         }
 
         // Creating adapter for spinner
@@ -138,14 +144,17 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
 
         // attaching data adapter to spinner
         userChoice.setAdapter(dataAdapter);
+        Log.d(TAG,"initialised spinner");
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // On selecting a spinner item
-        String item = parent.getItemAtPosition(position).toString();
-        currRef.removeEventListener(event);
-        currRef = dataRef.child(item);
+        Log.d(TAG,"starting onItemSelected");
+        String item = "";
+        item = parent.getItemAtPosition(position).toString();
+        //newRef.removeEventListener(event);
+        /*newRef = dataRef.child(item);
         event = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -170,7 +179,23 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         };
-        currRef.addValueEventListener(event);
+        */
+        if(item!=""){
+            Log.d(TAG,"itemselected something");
+            Log.d(TAG,"getting: " + item);
+            Log.d(TAG,"out of: " + dataArray.toString());
+            HashMap<String,String> value = dataArray.get(item);
+            Log.d(TAG,"this value is: " + value.toString());
+            String textToPrint = "";
+            textToPrint+=value.get(dataPoint1) + "\n";
+            textToPrint+=value.get(dataPoint2) + "\n";
+            textToPrint+=value.get(dataPoint3) + "\n";
+
+            DBData.setText(textToPrint);
+        }else{
+            Log.d(TAG,"itemselected whatever");
+        }
+        //currRef.addValueEventListener(event);
         // Showing selected spinner item
         Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
     }
