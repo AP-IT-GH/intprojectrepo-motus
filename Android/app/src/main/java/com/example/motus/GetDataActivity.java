@@ -46,10 +46,9 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
     private DatabaseReference dataRef;
     private Query databaseRef;
     private ValueEventListener event;
-    private Set<String> keySet;
     private String UID;
 
-    private HashMap<String,HashMap<String,String>> dataArray;
+    private ArrayList<HashMap<String,String>> dataArray;
 
     private FirebaseUser mUser;
 
@@ -64,6 +63,7 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         DBData = findViewById(R.id.liveData);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         dataRef = database.getReference(DatabaseDataReference);
+        Log.d(TAG,dataRef.toString());
         /*
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
@@ -106,10 +106,11 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
             public void onDataChange(DataSnapshot dataSnapshot){
                 Log.d(TAG,"snapshot:" + dataSnapshot.toString());
                 Log.d(TAG,"snapshot2:" + dataSnapshot.getValue().toString());
-                HashMap<String,HashMap<String,String>> data = (HashMap<String,HashMap<String,String>>) dataSnapshot.getValue();
+                ArrayList<HashMap<String,String>> data = (ArrayList<HashMap<String,String>>) dataSnapshot.getValue();
+                Log.d(TAG,"data: " + data.toString());
                 dataArray = data;
-                keySet = data.keySet();
-                Log.d(TAG,"length: " + keySet.toString());
+                //keySet = data.keySet();
+                //Log.d(TAG,"length: " + keySet.toString());
                 initialiseSpinner();
             }
 
@@ -127,12 +128,13 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         userChoice.setOnItemSelectedListener(this);
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-        if(keySet==null){
+        if(dataArray==null){
             categories.add("");
         }else{
-            for(String key: keySet){
-                Log.d(TAG,"key: " + key);
-                categories.add(key);
+            for(int i = 0;i<dataArray.size();i++){
+                if(dataArray.get(i)!=null){
+                    categories.add(i+"");
+                }
             }
         }
 
@@ -184,7 +186,7 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
             Log.d(TAG,"itemselected something");
             Log.d(TAG,"getting: " + item);
             Log.d(TAG,"out of: " + dataArray.toString());
-            HashMap<String,String> value = dataArray.get(item);
+            HashMap<String,String> value = dataArray.get(Integer.parseInt(item));
             Log.d(TAG,"this value is: " + value.toString());
             String textToPrint = "";
             textToPrint+=value.get(dataPoint1) + "\n";
