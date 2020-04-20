@@ -75,6 +75,7 @@ public class LoginActivity  extends NavigationMenu {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this,signInOptions);
 
+        // login google
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,6 +94,8 @@ public class LoginActivity  extends NavigationMenu {
                 }
             }
         });
+
+        //logout google
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,6 +105,7 @@ public class LoginActivity  extends NavigationMenu {
             }
         });
 
+        //sign up email
         signUP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -133,6 +137,8 @@ public class LoginActivity  extends NavigationMenu {
              });
             }
         });
+
+        // login email
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
