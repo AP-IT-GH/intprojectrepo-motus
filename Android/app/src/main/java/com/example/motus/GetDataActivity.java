@@ -1,6 +1,5 @@
 package com.example.motus;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -14,52 +13,36 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Set;
-
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class GetDataActivity extends AppCompatActivity implements OnItemSelectedListener{
 
     private Spinner userChoice;
-    private String TAG = "firebasedebug";
+    private String TAG = "firebase";
     private TextView DBData;
     private String DatabaseDataReference = "data";
     private String dataPoint1 = "angle";
     private String dataPoint2 = "time";
     private String dataPoint3 = "uid";
     private DatabaseReference currRef;
-    private DatabaseReference newRef;
     private DatabaseReference dataRef;
-    private Query databaseRef;
     private ValueEventListener event;
-    private String UID;
-
-    private ArrayList<HashMap<String,String>> dataArray;
-
-    private FirebaseUser mUser;
+    private int dataLength = 5;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_get_data);
 
-        mUser = FirebaseAuth.getInstance().getCurrentUser();
-        UID = mUser.getUid();
-        Log.d(TAG,UID);
         DBData = findViewById(R.id.liveData);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         dataRef = database.getReference(DatabaseDataReference);
@@ -115,11 +98,12 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
             }
-        });
-        initialiseSpinner();
+        };
+
     }
 
     private void initialiseSpinner() {
@@ -146,7 +130,6 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
 
         // attaching data adapter to spinner
         userChoice.setAdapter(dataAdapter);
-        Log.d(TAG,"initialised spinner");
     }
 
     @Override
@@ -164,13 +147,9 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
                 // whenever data at this location is updated.
                 HashMap<String,String> data = (HashMap<String,String>) dataSnapshot.getValue();
                 String value = "";
-                if(data.get(dataPoint3).equals(UID)){
-                    value += data.get(dataPoint1) + "\n";
-                    value += data.get(dataPoint2) + "\n";
-                    value += data.get(dataPoint3) + "\n";
-                }else{
-                    value += "Incorrect UID";
-                }
+                value += data.get(dataPoint1) + "\n";
+                value += data.get(dataPoint2) + "\n";
+                value += data.get(dataPoint3) + "\n";
                 DBData.setText(value);
                 Log.d(TAG, "Value is: " + value);
             }
