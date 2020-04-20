@@ -62,18 +62,17 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         Log.d(TAG,UID);
         DBData = findViewById(R.id.liveData);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        dataRef = database.getReference(DatabaseDataReference); //referentie naar de database
-
+        dataRef = database.getReference(DatabaseDataReference);
+        Log.d(TAG,dataRef.toString());
+        /*
         dataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                //De snapshot van de referentie
+                Log.d(TAG,"snapshot:" + dataSnapshot.toString());
                 ArrayList<String> data = (ArrayList<String>) dataSnapshot.getValue();
-                //De lijst van alle data
                 dataLength = data.size();
-                //De grootte van de lijst opvragen
+                Log.d(TAG,"length: " + dataLength);
                 initialiseSpinner();
-                //De menu initialiseren met de grootte van de lijst (default=5)
             }
 
             @Override
@@ -81,27 +80,38 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
                 System.out.println("The read failed: " + databaseError.getCode());
             }
         });
-        currRef = dataRef; //De referentie die momenteel wordt gebruikt
-        initialiseSpinner(); // Moet ik doen anders crasht da denk ik
-        event = new ValueEventListener() {
+        */
+
+        /*
+        dataRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-
-                //Data: {0:(time:x,angle:y,uid:z),...}
                 HashMap<String,String> data = (HashMap<String,String>) dataSnapshot.getValue();
+                dataLength = data.size();
+                initialiseSpinner();
+            }
 
-                //Data omzetten naar string
-                String value = "";
-                value += data.get(dataPoint1) + "\n";
-                value += data.get(dataPoint2) + "\n";
-                value += data.get(dataPoint3) + "\n";
-                //string zetten in de textview
-                DBData.setText(value);
-
-                //controle
-                Log.d(TAG, "Value is: " + value);
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+                Log.w(TAG, "Failed to read value.", error.toException());
+            }
+        });
+        */
+        currRef = dataRef;
+        currRef.orderByChild("uid").equalTo(UID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot){
+                Log.d(TAG,"snapshot:" + dataSnapshot.toString());
+                Log.d(TAG,"snapshot2:" + dataSnapshot.getValue().toString());
+                ArrayList<HashMap<String,String>> data = (ArrayList<HashMap<String,String>>) dataSnapshot.getValue();
+                Log.d(TAG,"data: " + data.toString());
+                dataArray = data;
+                //keySet = data.keySet();
+                //Log.d(TAG,"length: " + keySet.toString());
+                initialiseSpinner();
             }
 
             @Override
@@ -113,17 +123,19 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
     }
 
     private void initialiseSpinner() {
-        //reset de 'spinner'
         userChoice = null;
         userChoice = findViewById(R.id.spinner);
         userChoice.setOnItemSelectedListener(this);
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-
-        //Aangezien da van 0-x gaat gewoon ne lijst van 0-x maken
-        for(int i = 0;i<dataLength;i++){
-            String toAdd = "";
-            categories.add(toAdd+i);
+        if(dataArray==null){
+            categories.add("");
+        }else{
+            for(int i = 0;i<dataArray.size();i++){
+                if(dataArray.get(i)!=null){
+                    categories.add(i+"");
+                }
+            }
         }
 
         // Creating adapter for spinner
@@ -140,20 +152,16 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
         // On selecting a spinner item
-        String item = parent.getItemAtPosition(position).toString();
-
-        //referentie resetten
-        currRef.removeEventListener(event);
-
-        //referentie leggen naar het nieuw geselecteerde item (0,1,2, etc.)
-        currRef = dataRef.child(item);
+        Log.d(TAG,"starting onItemSelected");
+        String item = "";
+        item = parent.getItemAtPosition(position).toString();
+        //newRef.removeEventListener(event);
+        /*newRef = dataRef.child(item);
         event = new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-
-                //Basically hetzelfde als hierboven
                 HashMap<String,String> data = (HashMap<String,String>) dataSnapshot.getValue();
                 String value = "";
                 if(data.get(dataPoint3).equals(UID)){
@@ -173,8 +181,23 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
                 Log.w(TAG, "Failed to read value.", error.toException());
             }
         };
-        //eventlistener aan referentie toevoegen, als die verandert moet ge da terug doen.
-        currRef.addValueEventListener(event);
+        */
+        if(item!=""){
+            Log.d(TAG,"itemselected something");
+            Log.d(TAG,"getting: " + item);
+            Log.d(TAG,"out of: " + dataArray.toString());
+            HashMap<String,String> value = dataArray.get(Integer.parseInt(item));
+            Log.d(TAG,"this value is: " + value.toString());
+            String textToPrint = "";
+            textToPrint+=value.get(dataPoint1) + "\n";
+            textToPrint+=value.get(dataPoint2) + "\n";
+            textToPrint+=value.get(dataPoint3) + "\n";
+
+            DBData.setText(textToPrint);
+        }else{
+            Log.d(TAG,"itemselected whatever");
+        }
+        //currRef.addValueEventListener(event);
         // Showing selected spinner item
         Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_LONG).show();
     }
