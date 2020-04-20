@@ -49,6 +49,7 @@ public class LoginActivity  extends NavigationMenu {
     EditText password;
     Button signUP;
     Button login;
+    Button signOUT;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +65,7 @@ public class LoginActivity  extends NavigationMenu {
         password = findViewById(R.id.password);
         signUP = findViewById(R.id.signUP);
         login = findViewById(R.id.login);
-
+        signOUT = findViewById(R.id.signOUT);
 
 
         GoogleSignInOptions signInOptions =  new GoogleSignInOptions
@@ -109,32 +110,7 @@ public class LoginActivity  extends NavigationMenu {
         signUP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String emailInput = email.getText().toString();
-                final String passwordInput = password.getText().toString();
-             final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-             firebaseAuth.createUserWithEmailAndPassword(emailInput,passwordInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                 @Override
-                 public void onComplete(@NonNull Task<AuthResult> task) {
-                     if (task.isSuccessful())
-                     {
-                         firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                             @Override
-                             public void onComplete(@NonNull Task<Void> task) {
-                                 if (task.isSuccessful())
-                                 {
-                                     Toast.makeText(LoginActivity.this,"User signed up", Toast.LENGTH_SHORT).show();
-                                     email.setText("");
-                                     password.setText("");
-                                 }else{
-                                     Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                 }
-                             }
-                         });
-                     }else{
-                         Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                     }
-                 }
-             });
+                signUPMail();
             }
         });
 
@@ -142,30 +118,17 @@ public class LoginActivity  extends NavigationMenu {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                final String emailInput = email.getText().toString();
-                final String passwordInput = password.getText().toString();
-                final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                firebaseAuth.signInWithEmailAndPassword(emailInput,passwordInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful())
-                        {
-                            if (firebaseAuth.getCurrentUser().isEmailVerified())
-                            {
-                                Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
-
-                            }else{
-                                Toast.makeText(LoginActivity.this, "please verify your email", Toast.LENGTH_SHORT).show();
-
-                            }
-                        }else{
-                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+                loginMail();
             }
         });
 
+
+        signOUT.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                logoutmail();
+            }
+        });
     }
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
@@ -192,6 +155,76 @@ public class LoginActivity  extends NavigationMenu {
             firebaseGoogleAuth(null);
         }
     }
+
+    private void logoutmail(){
+        final String emailInput = email.getText().toString();
+        final String passwordInput = password.getText().toString();
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if (emailInput.length() == 0 || passwordInput.length()==0){
+            Toast.makeText(LoginActivity.this, "invalid email or password", Toast.LENGTH_SHORT).show();
+
+        }
+        firebaseAuth.signOut();
+
+    }
+
+    private void loginMail(){
+        final String emailInput = email.getText().toString();
+        final String passwordInput = password.getText().toString();
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if (emailInput.length() == 0 || passwordInput.length()==0){
+            Toast.makeText(LoginActivity.this, "invalid email or password", Toast.LENGTH_SHORT).show();
+
+        }
+        firebaseAuth.signInWithEmailAndPassword(emailInput,passwordInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful())
+                {
+                    if (firebaseAuth.getCurrentUser().isEmailVerified())
+                    {
+                        Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
+
+                    }else{
+                        Toast.makeText(LoginActivity.this, "please verify your email", Toast.LENGTH_SHORT).show();
+
+                    }
+                }else{
+                    Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    private void signUPMail(){
+        final String emailInput = email.getText().toString();
+        final String passwordInput = password.getText().toString();
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        firebaseAuth.createUserWithEmailAndPassword(emailInput,passwordInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful())
+                {
+                    firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful())
+                            {
+                                Toast.makeText(LoginActivity.this,"User signed up", Toast.LENGTH_SHORT).show();
+                                email.setText("");
+                                password.setText("");
+                            }else{
+                                Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+                }else{
+                    Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     private  void firebaseGoogleAuth(GoogleSignInAccount accountGoogle){
         AuthCredential authCredential = GoogleAuthProvider.getCredential(accountGoogle.getIdToken(), null);
         mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
