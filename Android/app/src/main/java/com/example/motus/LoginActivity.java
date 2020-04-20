@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,7 +45,10 @@ public class LoginActivity  extends NavigationMenu {
     DatabaseReference newRef = database.getReference("users");
     FirebaseDatabase databaseMessage = FirebaseDatabase.getInstance();
     DatabaseReference newRefMessage = databaseMessage.getReference("data");
-
+    EditText email;
+    EditText password;
+    Button signUP;
+    Button login;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +60,12 @@ public class LoginActivity  extends NavigationMenu {
         btnSignOut = findViewById(R.id.sign_out_bt);
         btnSendData = findViewById(R.id.send_data_id);
         data = new Data();
+        email = findViewById(R.id.mail);
+        password = findViewById(R.id.password);
+        signUP = findViewById(R.id.signUP);
+        login = findViewById(R.id.login);
+
+
 
         GoogleSignInOptions signInOptions =  new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -92,8 +102,64 @@ public class LoginActivity  extends NavigationMenu {
             }
         });
 
-        Intent intent = new Intent(this,ProfileInfo.class);
-        startActivity(intent);
+        signUP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String emailInput = email.getText().toString();
+                final String passwordInput = password.getText().toString();
+             final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+             firebaseAuth.createUserWithEmailAndPassword(emailInput,passwordInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                 @Override
+                 public void onComplete(@NonNull Task<AuthResult> task) {
+                     if (task.isSuccessful())
+                     {
+                         firebaseAuth.getCurrentUser().sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                             @Override
+                             public void onComplete(@NonNull Task<Void> task) {
+                                 if (task.isSuccessful())
+                                 {
+                                     Toast.makeText(LoginActivity.this,"User signed up", Toast.LENGTH_SHORT).show();
+                                     email.setText("");
+                                     password.setText("");
+                                 }else{
+                                     Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                 }
+                             }
+                         });
+                     }else{
+                         Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                     }
+                 }
+             });
+            }
+        });
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final String emailInput = email.getText().toString();
+                final String passwordInput = password.getText().toString();
+                final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+                firebaseAuth.signInWithEmailAndPassword(emailInput,passwordInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful())
+                        {
+                            if (firebaseAuth.getCurrentUser().isEmailVerified())
+                            {
+                                Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
+
+                            }else{
+                                Toast.makeText(LoginActivity.this, "please verify your email", Toast.LENGTH_SHORT).show();
+
+                            }
+                        }else{
+                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
+
     }
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();

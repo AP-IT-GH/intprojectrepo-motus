@@ -23,15 +23,18 @@
         <activity android:name=".ProfileInfo">
 
         </activity>
-        <activity android:name=".LoginActivity"/>
-        <activity android:name=".GetDataActivity"></activity>
-        <activity android:name=".CreateDummyData" />
-        <activity android:name=".ShowActivity" >
+        <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".GetDataActivity"></activity>
+        <activity android:name=".CreateDummyData" />
+        <activity android:name=".ShowActivity" >
+
         </activity>
         <activity android:name=".MainActivity" />
     </application>
