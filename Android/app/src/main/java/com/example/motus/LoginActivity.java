@@ -108,6 +108,12 @@ public class LoginActivity extends NavigationMenu {
                 ShowRegister();
             }
         });
+        signUP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowRegister();
+            }
+        });
 
         // login email
         login.setOnClickListener(new View.OnClickListener() {

@@ -10,6 +10,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -34,6 +35,7 @@ public class NavigationMenu extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().hide();
         drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open,R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -43,6 +45,7 @@ public class NavigationMenu extends AppCompatActivity {
         nv.getMenu().findItem(R.id.connect).setActionView(new Switch(this));
         mAssistantSwitch = ((Switch) nv.getMenu().findItem(R.id.connect).getActionView());
         mAssistantSwitch.setChecked(switchPreference.getBoolean("switchState",true));
+        mAssistantSwitch.setTextColor(getResources().getColor(R.color.startYellow));
         mAssistantSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 SharedPreferences switchPreference = getSharedPreferences("switch", Context.MODE_PRIVATE);
@@ -66,6 +69,34 @@ public class NavigationMenu extends AppCompatActivity {
                 return false;
             }
         });;
+        nv.getMenu().findItem(R.id.home).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                ShowHome();
+                return false;
+            }
+        });;
+        nv.getMenu().findItem(R.id.injuries).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                ShowInjuries();
+                return false;
+            }
+        });;
+        nv.getMenu().findItem(R.id.measure).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                ShowMeasure();
+                return false;
+            }
+        });;
+        nv.getMenu().findItem(R.id.logout).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Logout();
+                return false;
+            }
+        });;
     }
 
     @Override
@@ -82,7 +113,23 @@ public class NavigationMenu extends AppCompatActivity {
         startActivity(intent);
     }
     public void ShowResults(){
-        Intent intent = new Intent(this, ResultsActivity.class);
+        //Intent intent = new Intent(this, ResultsActivity.class);
+        //startActivity(intent);
+    }
+    public void ShowHome(){
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
+    public void ShowMeasure(){
+        //Intent intent = new Intent(this, MeasuringActivity.class);
+        //startActivity(intent);
+    }
+    public void ShowInjuries(){
+        //Intent intent = new Intent(this, InjuryActivity.class);
+        //startActivity(intent);
+    }
+    public void Logout(){
+        Intent intent = new Intent(this, LoginActivity.class);
         startActivity(intent);
     }
 }
