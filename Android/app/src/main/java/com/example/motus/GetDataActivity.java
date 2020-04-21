@@ -182,7 +182,17 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
             }
 
         }
+        // activate horizontal zooming and scrolling
+        graph.getViewport().setScalable(true);
 
+        // activate horizontal scrolling
+        graph.getViewport().setScrollable(true);
+
+        // activate horizontal and vertical zooming and scrolling
+        graph.getViewport().setScalableY(true);
+
+        // activate vertical scrolling
+        graph.getViewport().setScrollableY(true);
         //we voegen de serie toe aan de grafiek
         graph.addSeries(series);
     }
