@@ -25,7 +25,7 @@ public class DummyButton extends AppCompatActivity {
         startMeasureButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view){
-                Log.d(LOG_TAG, "Pressed Button");
+                Log.d(LOG_TAG, "Pressed Dummy measuring Button");
                 launchMeasuringActivity(view);
             }
         });
