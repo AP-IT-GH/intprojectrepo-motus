@@ -7,6 +7,8 @@
     <color name="White">#FFFFFF</color>
     <color name="Black">#000000</color>
 
+    <color name="blue">#0b4996</color>
+
     //Profile Screen
     <color name="startYellow">#FFC800</color>
     <color name="endYellow">#EB9C00</color>

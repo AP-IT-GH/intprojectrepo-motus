@@ -5,11 +5,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -30,7 +29,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class LoginActivity  extends NavigationMenu {
+public class LoginActivity extends NavigationMenu {
     private SignInButtonImpl signInButton;
     private GoogleSignInClient mGoogleSignInClient;
     private String TAG="LoginActivity";
@@ -44,8 +43,10 @@ public class LoginActivity  extends NavigationMenu {
     DatabaseReference newRef = database.getReference("users");
     FirebaseDatabase databaseMessage = FirebaseDatabase.getInstance();
     DatabaseReference newRefMessage = databaseMessage.getReference("data");
-
-
+    EditText email;
+    EditText password;
+    Button signUP;
+    Button login;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +57,12 @@ public class LoginActivity  extends NavigationMenu {
         btnSignOut = findViewById(R.id.sign_out_bt);
         btnSendData = findViewById(R.id.send_data_id);
         data = new Data();
+        email = findViewById(R.id.mail);
+        password = findViewById(R.id.password);
+        signUP = findViewById(R.id.signUP);
+        login = findViewById(R.id.login);
+
+
 
         GoogleSignInOptions signInOptions =  new GoogleSignInOptions
                 .Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -65,6 +72,7 @@ public class LoginActivity  extends NavigationMenu {
 
         mGoogleSignInClient = GoogleSignIn.getClient(this,signInOptions);
 
+        // login google
         signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,6 +91,8 @@ public class LoginActivity  extends NavigationMenu {
                 }
             }
         });
+
+        //logout google
         btnSignOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -92,16 +102,31 @@ public class LoginActivity  extends NavigationMenu {
             }
         });
 
-        Intent intent = new Intent(this,ProfileInfo.class);
-        startActivity(intent);
+        signUP.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ShowRegister();
+            }
+        });
+
+        // login email
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loginMail();
+            }
+        });
+
     }
+
+
     private void signIn(){
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent,RC_SIGN_IN);
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN){
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
@@ -120,6 +145,52 @@ public class LoginActivity  extends NavigationMenu {
             firebaseGoogleAuth(null);
         }
     }
+
+    private void logoutmail(){
+        final String emailInput = email.getText().toString();
+        final String passwordInput = password.getText().toString();
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if (emailInput.length() == 0 || passwordInput.length()==0){
+            Toast.makeText(LoginActivity.this, "invalid email or password", Toast.LENGTH_SHORT).show();
+
+        }
+        firebaseAuth.signOut();
+
+    }
+
+    private void loginMail(){
+        final String emailInput = email.getText().toString();
+        final String passwordInput = password.getText().toString();
+        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        if (emailInput.length() == 0 || passwordInput.length()==0){
+            Toast.makeText(LoginActivity.this, "invalid email or password", Toast.LENGTH_SHORT).show();
+
+        }else{
+            firebaseAuth.signInWithEmailAndPassword(emailInput,passwordInput).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                @Override
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    if (task.isSuccessful())
+                    {
+                        if (firebaseAuth.getCurrentUser().isEmailVerified())
+                        {
+                            Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            AddToDatabase(user);
+                        }else{
+                            Toast.makeText(LoginActivity.this, "please verify your email", Toast.LENGTH_SHORT).show();
+
+                        }
+                    }else{
+                        Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
+        }
+
+    }
+
+
+
     private  void firebaseGoogleAuth(GoogleSignInAccount accountGoogle){
         AuthCredential authCredential = GoogleAuthProvider.getCredential(accountGoogle.getIdToken(), null);
         mAuth.signInWithCredential(authCredential).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -128,12 +199,13 @@ public class LoginActivity  extends NavigationMenu {
                 if (task.isSuccessful()){
                     Toast.makeText(LoginActivity.this, "Successful", Toast.LENGTH_SHORT).show();
                     FirebaseUser user = mAuth.getCurrentUser();
-                    updateUI(user);
+                    updateUI();
+                    AddToDatabase(user);
                     String currentUser = user.getUid();
                     data.setUid(currentUser);
                 }else{
                     Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
-                    updateUI(null);
+                    updateUI();
                 }
             }
         });
@@ -161,11 +233,7 @@ public class LoginActivity  extends NavigationMenu {
             }
         });
     }
-
-    private void updateUI(FirebaseUser userGoogle){
-        btnSignOut.setVisibility(View.VISIBLE);
-
-
+    private void AddToDatabase(FirebaseUser userGoogle){
         if (userGoogle != null){
             String personName = userGoogle.getDisplayName();
             String personEmail = userGoogle.getEmail();
@@ -180,6 +248,14 @@ public class LoginActivity  extends NavigationMenu {
             Toast.makeText(LoginActivity.this, personName + personEmail, Toast.LENGTH_SHORT).show();
 
         }
+    }
 
+    private void updateUI(){
+        btnSignOut.setVisibility(View.VISIBLE);
+    }
+
+    public void ShowRegister(){
+        Intent intent = new Intent(this, RegisterActivity.class);
+        startActivity(intent);
     }
 }
