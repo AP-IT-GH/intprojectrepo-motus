@@ -22,6 +22,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
@@ -50,6 +53,8 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
     private ArrayList<HashMap<String,String>> dataArray;
 
     private FirebaseUser mUser;
+
+    private LineGraphSeries<DataPoint> series;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,6 +151,40 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         // attaching data adapter to spinner
         userChoice.setAdapter(dataAdapter);
         Log.d(TAG,"initialised spinner");
+        if(dataArray!=null){
+            drawGraph();
+        }
+    }
+
+    private void drawGraph(){
+//Dit is een voorbeeld van hoe een grafiek werkt. Dit kan in eender welke activity verwerkt
+        //worden.
+
+        //twee punten, x en y aanmaken
+        double x,y;
+
+        //de graphview uit de layout halen
+        GraphView graph = (GraphView)findViewById(R.id.graph);
+
+        //een serie punten voor op de graphview
+        series = new LineGraphSeries<>();
+
+        //een vooraf bepaald aantal datapunten
+        int numDataPoints = 100;
+
+        //we gaan voor elk punt dat we willen een nieuw datapunt aanmaken en toevoegen aan de serie
+        for(int i = 0;i<dataArray.size();i++){
+            if(dataArray.get(i)!=null){
+                y = Double.parseDouble(dataArray.get(i).get(dataPoint1));
+                x = Double.parseDouble(dataArray.get(i).get(dataPoint2));
+                //nieuw datapunt aanmaken en toevoegen aan de serie datapunten
+                series.appendData(new DataPoint(x,y),true,100);
+            }
+
+        }
+
+        //we voegen de serie toe aan de grafiek
+        graph.addSeries(series);
     }
 
     @Override
