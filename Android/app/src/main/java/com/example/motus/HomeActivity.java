@@ -57,8 +57,8 @@ public class HomeActivity extends NavigationMenu {
     }
 
     public void ShowResults() {
-        //Intent intent = new Intent(this, ResultsActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, GetDataActivity.class);
+        startActivity(intent);
     }
 
     public void ShowMeasure() {

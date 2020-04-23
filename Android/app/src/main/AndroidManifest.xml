@@ -14,6 +14,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".HomeActivity">
+
+
         </activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".edit_profile_screen" />
@@ -23,12 +25,16 @@
         <activity android:name=".ProfileInfo" />
         <activity android:name=".LoginActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+
         </activity>
-        <activity android:name=".GetDataActivity" />
+        <activity android:name=".GetDataActivity" >
+
+        </activity>
+
         <activity android:name=".CreateDummyData" />
         <activity android:name=".ShowActivity" />
         <activity android:name=".MainActivity" />

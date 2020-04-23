@@ -47,6 +47,7 @@ public class LoginActivity extends NavigationMenu {
     EditText password;
     Button signUP;
     Button login;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,12 +103,6 @@ public class LoginActivity extends NavigationMenu {
             }
         });
 
-        signUP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ShowRegister();
-            }
-        });
         signUP.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -182,6 +177,7 @@ public class LoginActivity extends NavigationMenu {
                             Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
                             AddToDatabase(user);
+                            ShowHome();
                         }else{
                             Toast.makeText(LoginActivity.this, "please verify your email", Toast.LENGTH_SHORT).show();
 
@@ -209,6 +205,7 @@ public class LoginActivity extends NavigationMenu {
                     AddToDatabase(user);
                     String currentUser = user.getUid();
                     data.setUid(currentUser);
+                    ShowHome();
                 }else{
                     Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                     updateUI();
@@ -260,6 +257,10 @@ public class LoginActivity extends NavigationMenu {
         btnSignOut.setVisibility(View.VISIBLE);
     }
 
+    public void ShowHome(){
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
     public void ShowRegister(){
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
