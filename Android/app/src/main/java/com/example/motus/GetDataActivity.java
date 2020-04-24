@@ -34,6 +34,8 @@ import java.util.Set;
 
 import android.widget.AdapterView.OnItemSelectedListener;
 
+import org.w3c.dom.Text;
+
 public class GetDataActivity extends AppCompatActivity implements OnItemSelectedListener{
 
     private Spinner userChoice;
@@ -68,50 +70,17 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         dataRef = database.getReference(DatabaseDataReference);
         Log.d(TAG,dataRef.toString());
-        /*
-        dataRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(TAG,"snapshot:" + dataSnapshot.toString());
-                ArrayList<String> data = (ArrayList<String>) dataSnapshot.getValue();
-                dataLength = data.size();
-                Log.d(TAG,"length: " + dataLength);
-                initialiseSpinner();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                System.out.println("The read failed: " + databaseError.getCode());
-            }
-        });
-        */
-
-        /*
-        dataRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                // This method is called once with the initial value and again
-                // whenever data at this location is updated.
-                HashMap<String,String> data = (HashMap<String,String>) dataSnapshot.getValue();
-                dataLength = data.size();
-                initialiseSpinner();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError error) {
-                // Failed to read value
-                Log.w(TAG, "Failed to read value.", error.toException());
-            }
-        });
-        */
         currRef = dataRef;
         currRef.orderByChild("uid").equalTo(UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot){
                 Log.d(TAG,"snapshot:" + dataSnapshot.toString());
-                Log.d(TAG,"snapshot2:" + dataSnapshot.getValue().toString());
+                //Log.d(TAG,"snapshot2:" + dataSnapshot.getValue().toString());
                 ArrayList<HashMap<String,String>> data = (ArrayList<HashMap<String,String>>) dataSnapshot.getValue();
-                Log.d(TAG,"data: " + data.toString());
+                if(data != null){
+                    Log.d(TAG,"data: " + data.toString());
+                }
+
                 dataArray = data;
                 //keySet = data.keySet();
                 //Log.d(TAG,"length: " + keySet.toString());
@@ -152,19 +121,25 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         userChoice.setAdapter(dataAdapter);
         Log.d(TAG,"initialised spinner");
         if(dataArray!=null){
-            drawGraph();
+            if(dataArray.size()!=0){
+                Log.d(TAG,"lmao");
+                drawGraph();
+            }
         }
     }
 
     private void drawGraph(){
-//Dit is een voorbeeld van hoe een grafiek werkt. Dit kan in eender welke activity verwerkt
+
+        //Dit is een voorbeeld van hoe een grafiek werkt. Dit kan in eender welke activity verwerkt
         //worden.
 
         //twee punten, x en y aanmaken
         double x,y;
-
+        TextView t = findViewById(R.id.liveData);
+        t.setVisibility(View.INVISIBLE);
         //de graphview uit de layout halen
         GraphView graph = (GraphView)findViewById(R.id.graph);
+        graph.setVisibility(View.VISIBLE);
 
         //een serie punten voor op de graphview
         series = new LineGraphSeries<>();

@@ -10,5 +10,6 @@
     <string name="send_data">Send data</string>
     <string name="getdataactivity">getDataActivity</string>
     <string name="get_data">Get Data</string>
+    <string name="no_data_available">No data available</string>
 
 </resources>
