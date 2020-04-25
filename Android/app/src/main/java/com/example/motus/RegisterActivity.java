@@ -21,6 +21,12 @@ public class RegisterActivity extends AppCompatActivity {
     EditText email;
     EditText password;
     Button register;
+    EditText name;
+    String emailInput;
+    String passwordInput;
+    FirebaseAuth firebaseAuth;
+    String nameInput;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +37,7 @@ public class RegisterActivity extends AppCompatActivity {
         email = findViewById(R.id.email);
         password = findViewById(R.id.password);
         register = findViewById(R.id.register);
-
+        name = findViewById(R.id.name);
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -41,10 +47,11 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void registerUPMail(){
-        final String emailInput = email.getText().toString();
-        final String passwordInput = password.getText().toString();
-        final FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        if (emailInput.length() == 0 || passwordInput.length()==0){
+        emailInput = email.getText().toString();
+        passwordInput = password.getText().toString();
+        firebaseAuth = FirebaseAuth.getInstance();
+        nameInput = name.getText().toString();
+        if (emailInput.length() == 0 || passwordInput.length()==0 || nameInput.length() == 0){
             Toast.makeText(RegisterActivity.this, "invalid email or password", Toast.LENGTH_SHORT).show();
 
         }else{
@@ -78,6 +85,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     public void ShowLogin(){
         Intent intent = new Intent(this, LoginActivity.class);
+        intent.putExtra("NAME_OF_USER", nameInput);
         startActivity(intent);
     }
 }
