@@ -42,7 +42,7 @@
         android:id="@+id/sign_out_bt"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/sign_in_bt"
+        android:layout_below="@+id/grafiekbt"
         android:layout_centerInParent="true"
         android:text="@string/sign_out"
         android:visibility="gone"
@@ -58,7 +58,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginLeft="50dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="50dp"
         android:layout_marginRight="50dp"
         android:background="@drawable/rounded_button"
@@ -67,6 +67,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/login" />
+
 
     <Button
         android:id="@+id/signOUT"
@@ -106,7 +107,6 @@
         android:layout_marginBottom="50dp"
         android:padding="10dip"
         android:hint="Email"
-        android:inputType="text"
         android:textColor="@color/startYellow"
         android:textColorHint="@color/startYellow"
         android:background="@drawable/rounded_text"

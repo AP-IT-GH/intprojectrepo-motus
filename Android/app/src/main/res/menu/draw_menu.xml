@@ -1,30 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
     <item
-        android:id="@+id/assistantswitch"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Home" />
+        android:id="@+id/home"
+        android:icon="@drawable/ic_home_icon"
+        android:title="Home"/>
     <item
-        android:id="@+id/profile"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Profile" />
+        android:id="@+id/measure"
+        android:icon="@drawable/ic_weight_icon"
+        android:title="Measure" />
     <item
         android:id="@+id/results"
-        android:icon="@drawable/ic_launcher_foreground"
-        android:title="Results" />
+        android:icon="@drawable/ic_graph_icon"
+        android:title="Records" />
     <item
-        android:id="@+id/voiceswitch"
-        android:icon="@drawable/ic_launcher_foreground"
+        android:id="@+id/injuries"
+        android:icon="@drawable/ic_inury_icon"
         android:title="Injuries" />
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_profile_icon"
+        android:title="profile" />
     <item
         android:id="@+id/settings"
         android:title="Settings">
         <menu>
             <item
                 android:id="@+id/connect"
-                android:icon="@drawable/ic_launcher_foreground"
+                android:icon="@drawable/ic_bluetooth_icon"
                 android:title="Connect to device" />
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/ic_logout_icon"
+                android:title="Log out" />
         </menu>
     </item>
 </menu>

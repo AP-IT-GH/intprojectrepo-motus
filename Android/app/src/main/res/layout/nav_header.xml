@@ -2,24 +2,27 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="176dp"
-    android:background="@color/colorPrimary"
+    android:background="@color/blue"
     android:gravity="bottom"
     android:orientation="vertical"
     android:padding="16dp"
-    android:theme="@style/ThemeOverlay.AppCompat.Dark">
+    android:theme="@style/MotusNav">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="109dp"
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
         android:contentDescription="MOTUS"
-        android:src="@drawable/ic_launcher_foreground" />
+        android:textAlignment="center"
+        android:src="@drawable/logo_transparent" />
 
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="end"
         android:paddingTop="8dp"
         android:text="Navigation"
+        android:textAlignment="center"
+        android:textColor="@color/startYellow"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         android:textSize="18sp" />
 

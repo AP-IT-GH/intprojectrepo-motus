@@ -47,6 +47,7 @@ public class LoginActivity extends NavigationMenu {
     EditText password;
     Button signUP;
     Button login;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,6 +140,7 @@ public class LoginActivity extends NavigationMenu {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             Toast.makeText(LoginActivity.this, "Signed In, Great Success", Toast.LENGTH_SHORT).show();
             firebaseGoogleAuth(account);
+            ShowHome();
         }
         catch (ApiException e){
             Toast.makeText(LoginActivity.this, "Sign In Failure", Toast.LENGTH_SHORT).show();
@@ -175,7 +177,9 @@ public class LoginActivity extends NavigationMenu {
                         {
                             Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT).show();
                             FirebaseUser user = mAuth.getCurrentUser();
-                            AddToDatabase(user);
+                            String userLogin = getIntent().getStringExtra("NAME_OF_USER");
+                            AddToDatabase(user, userLogin);
+                            ShowHome();
                         }else{
                             Toast.makeText(LoginActivity.this, "please verify your email", Toast.LENGTH_SHORT).show();
 
@@ -200,9 +204,10 @@ public class LoginActivity extends NavigationMenu {
                     Toast.makeText(LoginActivity.this, "Successful", Toast.LENGTH_SHORT).show();
                     FirebaseUser user = mAuth.getCurrentUser();
                     updateUI();
-                    AddToDatabase(user);
+                    AddToDatabase(user, user.getDisplayName());
                     String currentUser = user.getUid();
                     data.setUid(currentUser);
+                    ShowHome();
                 }else{
                     Toast.makeText(LoginActivity.this, "Failed", Toast.LENGTH_SHORT).show();
                     updateUI();
@@ -233,19 +238,19 @@ public class LoginActivity extends NavigationMenu {
             }
         });
     }
-    private void AddToDatabase(FirebaseUser userGoogle){
+    private void AddToDatabase(FirebaseUser userGoogle, String username){
         if (userGoogle != null){
-            String personName = userGoogle.getDisplayName();
+
             String personEmail = userGoogle.getEmail();
             Uri personPhoto = userGoogle.getPhotoUrl();
             String currentUser = userGoogle.getUid();
             newRef.child(currentUser)
-                    .child("name").setValue(personName);
+                    .child("name").setValue(username);
             newRef.child(currentUser)
                     .child("uid").setValue(currentUser);
             newRef.child(currentUser)
                     .child("mail").setValue(personEmail);
-            Toast.makeText(LoginActivity.this, personName + personEmail, Toast.LENGTH_SHORT).show();
+            Toast.makeText(LoginActivity.this, username + personEmail, Toast.LENGTH_SHORT).show();
 
         }
     }
@@ -254,6 +259,10 @@ public class LoginActivity extends NavigationMenu {
         btnSignOut.setVisibility(View.VISIBLE);
     }
 
+    public void ShowHome(){
+        Intent intent = new Intent(this, HomeActivity.class);
+        startActivity(intent);
+    }
     public void ShowRegister(){
         Intent intent = new Intent(this, RegisterActivity.class);
         startActivity(intent);
