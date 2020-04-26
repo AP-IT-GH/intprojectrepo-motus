@@ -52,7 +52,7 @@ public class HomeActivity extends NavigationMenu {
     }
 
     public void ShowInfo() {
-        Intent intent = new Intent(this, ProfileInfo.class);
+        Intent intent = new Intent(this, ProfileScreenActivity.class);
         startActivity(intent);
     }
 
