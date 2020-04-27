@@ -41,7 +41,6 @@ public class ProfileScreenActivity extends AppCompatActivity {
         if (user != null){
             Email.setText(user.getEmail());
             Name.setText(user.getDisplayName());
-            ProfilePicture.setImageURI(user.getPhotoUrl());
         }
 
 

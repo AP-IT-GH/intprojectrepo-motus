@@ -3,7 +3,7 @@
     <string name="sign_out">Sign Out</string>
 
     //Profile Screen Variables
-    <string name="Username">Bernie Sanders</string>
+    <string name="Username">Your Name</string>
     <string name="Email">YourEmail@somethingmail.com</string>
 
     <string name="text_username">Name:</string>
