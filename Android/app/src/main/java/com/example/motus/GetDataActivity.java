@@ -249,8 +249,10 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         //we gaan voor elk punt dat we willen een nieuw datapunt aanmaken en toevoegen aan de serie
         for(int i = 0;i<dataArray.size();i++){
             if(dataArray.get(i)!=null){
-                y = Double.parseDouble(dataArray.get(i).get(dataPoint1));
-                x = Double.parseDouble(dataArray.get(i).get(dataPoint2));
+                String yValue = dataArray.get(i).get(dataPoint1).replace(" ","");
+                String xValue = dataArray.get(i).get(dataPoint2).replace(" ","");
+                y = Double.parseDouble(yValue);
+                x = Double.parseDouble(xValue);
                 //nieuw datapunt aanmaken en toevoegen aan de serie datapunten
                 series.appendData(new DataPoint(x,y),true,100);
             }
