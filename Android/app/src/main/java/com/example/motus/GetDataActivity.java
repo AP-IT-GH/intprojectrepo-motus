@@ -258,7 +258,7 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         }
         //we voegen de serie toe aan de grafiek
         graph.addSeries(series);
-        graph.setTitle("Angle of arm over time");
+        graph.setTitle("Angle (°) / Time (s)");
     }
 
     @Override
