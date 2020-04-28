@@ -109,24 +109,24 @@ public class NavigationMenu extends AppCompatActivity {
     }
 
     public void ShowInfo(){
-        Intent intent = new Intent(this, ProfileInfo.class);
+        Intent intent = new Intent(this, ProfileScreenActivity.class);
         startActivity(intent);
     }
     public void ShowResults(){
-        //Intent intent = new Intent(this, ResultsActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, GetDataActivity.class);
+        startActivity(intent);
     }
     public void ShowHome(){
         Intent intent = new Intent(this, HomeActivity.class);
         startActivity(intent);
     }
     public void ShowMeasure(){
-        //Intent intent = new Intent(this, MeasuringActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, MeasuringActivity.class);
+        startActivity(intent);
     }
     public void ShowInjuries(){
-        //Intent intent = new Intent(this, InjuryActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, InjuryActivity.class);
+        startActivity(intent);
     }
     public void Logout(){
         Intent intent = new Intent(this, LoginActivity.class);
