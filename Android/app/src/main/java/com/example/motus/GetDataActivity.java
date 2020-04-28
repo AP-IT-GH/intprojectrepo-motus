@@ -56,8 +56,6 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
     private String UID;
 
     private ArrayList<HashMap<String,String>> dataArray;
-    private HashMap<String,HashMap<String,String>> dataHash;
-    private boolean isHashmap;
 
     private FirebaseUser mUser;
 
@@ -77,16 +75,9 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         currRef.orderByChild("uid").equalTo(UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot){
-                if(dataSnapshot.getValue() instanceof HashMap){
-                    HashMap<String,HashMap<String,String>> data = (HashMap<String,HashMap<String,String>>)dataSnapshot.getValue();
-                    isHashmap = true;
-                }else{
-                    ArrayList<HashMap<String,String>> data = (ArrayList<HashMap<String,String>>) dataSnapshot.getValue();
-                    dataArray = data;
-                    isHashmap = false;
-                }
-                Log.d(TAG,dataSnapshot.getValue().toString());
-
+                dataSnapshot.getValue().toString();
+                ArrayList<HashMap<String,String>> data = (ArrayList<HashMap<String,String>>) dataSnapshot.getValue();
+                dataArray = data;
                 initialiseSpinner();
             }
 
@@ -129,28 +120,15 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         userChoice.setOnItemSelectedListener(this);
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
-        if(isHashmap = true){
-            if(dataHash==null){
-                categories.add("");
-            }else{
-                int index = 0;
-                for(String key : dataHash.keySet()){
-                    categories.add(index+"");
-                    index++;
-                }
-            }
+        if(dataArray==null){
+            categories.add("");
         }else{
-            if(dataArray==null){
-                categories.add("");
-            }else{
-                for(int i = 0;i<dataArray.size();i++){
-                    if(dataArray.get(i)!=null){
-                        categories.add(i+"");
-                    }
+            for(int i = 0;i<dataArray.size();i++){
+                if(dataArray.get(i)!=null){
+                    categories.add(i+"");
                 }
             }
         }
-
 
         // Creating adapter for spinner
         ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, categories);
@@ -160,35 +138,19 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
 
         // attaching data adapter to spinner
         userChoice.setAdapter(dataAdapter);
-        if(isHashmap){
-            if(dataHash!=null){
-                if(dataHash.size()!=0){
-                    drawGraph();
-                    getInjuries();
-                }else{
-                    Log.d(TAG,"null");
-                    hideGraph();
-                }
+        if(dataArray!=null){
+            if(dataArray.size()!=0){
+                drawGraph();
+                getInjuries();
+                Log.d(TAG,"size > 0");
             }else{
-                Log.d(TAG,"null");
+                Log.d(TAG,"size = 0");
                 hideGraph();
             }
         }else{
-            if(dataArray!=null){
-                if(dataArray.size()!=0){
-                    drawGraph();
-                    getInjuries();
-                    Log.d(TAG,"size > 0");
-                }else{
-                    Log.d(TAG,"size = 0");
-                    hideGraph();
-                }
-            }else{
-                Log.d(TAG,"null");
-                hideGraph();
-            }
+            Log.d(TAG,"null");
+            hideGraph();
         }
-
     }
 
     private void hideGraph(){
@@ -204,25 +166,14 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         if(dataArray.size()>10){
             ArrayList<Double> datapoints = new ArrayList<>();
             double y;
-            if(isHashmap){
-                for(String key : dataHash.keySet()){
-                    HashMap<String,String> datapoint = dataHash.get(key);
-                    String yValue = datapoint.get(dataPoint1).replace(" ","");
+            for(int i = 0;i<dataArray.size();i++){
+                if(dataArray.get(i)!=null){
+                    String yValue = dataArray.get(i).get(dataPoint1).replace(" ","");
                     y = Double.parseDouble(yValue);
                     //nieuw datapunt aanmaken en toevoegen aan de serie datapunten
                     datapoints.add(y);
                 }
-            }else{
-                for(int i = 0;i<dataArray.size();i++){
-                    if(dataArray.get(i)!=null){
-                        String yValue = dataArray.get(i).get(dataPoint1).replace(" ","");
-                        y = Double.parseDouble(yValue);
-                        //nieuw datapunt aanmaken en toevoegen aan de serie datapunten
-                        datapoints.add(y);
-                    }
-                }
             }
-
             ArrayList<Integer> outliers = new ArrayList<>();
             double movingAverage;
             ArrayList<Double> outlierValues = new ArrayList<>();
@@ -298,27 +249,16 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         int numDataPoints = 100;
 
         //we gaan voor elk punt dat we willen een nieuw datapunt aanmaken en toevoegen aan de serie
-        if(isHashmap){
-            for(String key : dataHash.keySet()){
-                HashMap<String,String> datapoint = dataHash.get(key);
-                String yValue = datapoint.get(dataPoint1).replace(" ","");
-                String xValue = datapoint.get(dataPoint2).replace(" ","");
+        for(int i = 0;i<dataArray.size();i++){
+            if(dataArray.get(i)!=null){
+                String yValue = dataArray.get(i).get(dataPoint1).replace(" ","");
+                String xValue = dataArray.get(i).get(dataPoint2).replace(" ","");
                 y = Double.parseDouble(yValue);
                 x = Double.parseDouble(xValue);
                 //nieuw datapunt aanmaken en toevoegen aan de serie datapunten
                 series.appendData(new DataPoint(x,y),true,100);
             }
-        }else{
-            for(int i = 0;i<dataArray.size();i++){
-                if(dataArray.get(i)!=null){
-                    String yValue = dataArray.get(i).get(dataPoint1).replace(" ","");
-                    String xValue = dataArray.get(i).get(dataPoint2).replace(" ","");
-                    y = Double.parseDouble(yValue);
-                    x = Double.parseDouble(xValue);
-                    //nieuw datapunt aanmaken en toevoegen aan de serie datapunten
-                    series.appendData(new DataPoint(x,y),true,100);
-                }
-            }
+
         }
         //we voegen de serie toe aan de grafiek
         graph.addSeries(series);
