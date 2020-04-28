@@ -113,8 +113,24 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
             if(dataArray.size()!=0){
                 drawGraph();
                 getInjuries();
+                Log.d(TAG,"size > 0");
+            }else{
+                Log.d(TAG,"size = 0");
+                hideGraph();
             }
+        }else{
+            Log.d(TAG,"null");
+            hideGraph();
         }
+    }
+
+    private void hideGraph(){
+        TextView t = findViewById(R.id.liveData);
+        t.setVisibility(View.VISIBLE);
+        t.setText("No data found");
+        //de graphview uit de layout halen
+        GraphView graph = (GraphView)findViewById(R.id.graph);
+        graph.setVisibility(View.INVISIBLE);
     }
 
     private void getInjuries(){
