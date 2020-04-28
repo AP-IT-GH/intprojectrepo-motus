@@ -133,7 +133,7 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
             ArrayList<Double> outlierValues = new ArrayList<>();
             for(int i = 5;i<datapoints.size()-5;i++){
                 movingAverage = 0;
-                for(int j = -5;i < 5;i++){
+                for(int j = -5;j < 5;j++){
                     movingAverage += datapoints.get(i+j);
                 }
                 movingAverage /= 10;
@@ -165,6 +165,18 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
 
         //een serie punten voor op de graphview
         series = new LineGraphSeries<>();
+
+        // activate horizontal zooming and scrolling
+        graph.getViewport().setScalable(true);
+
+        // activate horizontal scrolling
+        //graph.getViewport().setScrollable(true);
+
+        // activate horizontal and vertical zooming and scrolling
+        graph.getViewport().setScalableY(true);
+
+        // activate vertical scrolling
+        //graph.getViewport().setScrollableY(true);
 
         //een vooraf bepaald aantal datapunten
         int numDataPoints = 100;
