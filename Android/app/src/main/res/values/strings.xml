@@ -34,4 +34,11 @@
     <string name="getdataactivity">getDataActivity</string>
     <string name="get_data">Get Data</string>
 
+    //injury variables
+    <string-array name="category">
+        <item>Biceps</item>
+        <item>Triceps</item>
+        <item>Forearm</item>
+    </string-array>
+
 </resources>

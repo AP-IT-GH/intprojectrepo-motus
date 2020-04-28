@@ -8,7 +8,7 @@
     tools:context=".HomeActivity">
 
     <Button
-        android:id="@+id/measure"
+        android:id="@+id/measureButton"
         android:layout_width="170dp"
         android:layout_height="170dp"
         android:layout_marginStart="5dp"
@@ -62,7 +62,7 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/measure" />
+        app:layout_constraintTop_toBottomOf="@+id/measureButton" />
 
     <Button
         android:id="@+id/profile"

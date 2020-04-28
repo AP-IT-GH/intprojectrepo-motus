@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "6201255775-tli9l0ruhvuudof731ehpcl1plefd71s.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.motus",
+            "certificate_hash": "60a41be0ab1173b534b49f2a9bc36c2244f812ea"
+          }
+        },
+        {
           "client_id": "6201255775-vi94i565fu7hse2rbccjd67h246d3av5.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

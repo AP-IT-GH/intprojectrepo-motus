@@ -20,7 +20,7 @@ public class HomeActivity extends NavigationMenu {
         View contentView = inflater.inflate(R.layout.activity_home, null, false);
         drawer.addView(contentView, 0);
 
-        btnMeasure = findViewById(R.id.measure);
+        btnMeasure = findViewById(R.id.measureButton);
         btnRecords = findViewById(R.id.records);
         btnInjuries = findViewById(R.id.injuries);
         btnProfile = findViewById(R.id.profile);
@@ -62,12 +62,12 @@ public class HomeActivity extends NavigationMenu {
     }
 
     public void ShowMeasure() {
-        //Intent intent = new Intent(this, MeasuringActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, MeasuringActivity.class);
+        startActivity(intent);
     }
 
     public void ShowInjuries() {
-        //Intent intent = new Intent(this, InjuryActivity.class);
-        //startActivity(intent);
+        Intent intent = new Intent(this, InjuryActivity.class);
+        startActivity(intent);
     }
 }
