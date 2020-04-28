@@ -1,9 +1,12 @@
 package com.example.motus;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -85,6 +88,31 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         initialiseSpinner();
     }
 
+    public void BuildDialog(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(GetDataActivity.this);
+
+        builder.setCancelable(false);
+        builder.setTitle("Injuries detected!");
+        builder.setMessage("Please check your with the Injuries menu.");
+
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.setNegativeButton("Injury menu", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                ShowInjuries();
+            }
+        });
+        builder.show();
+    }
+    public void ShowInjuries() {
+        Intent intent = new Intent(this, InjuryActivity.class);
+        startActivity(intent);
+    }
     private void initialiseSpinner() {
         userChoice = null;
         userChoice = findViewById(R.id.spinner);
@@ -160,6 +188,10 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
                 }
             }
             for(int i = 0;i<outliers.size();i++){
+                if (outliers.size()>5)
+                {
+                    BuildDialog();
+                }
                 Log.d(TAG,"pointnr: " + outliers.get(i) + " is an outlier with real value: " + datapoints.get(outliers.get(i)));
                 Log.d(TAG,"expected value: " + outlierValues.get(i));
             }
