@@ -75,7 +75,6 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         currRef.orderByChild("uid").equalTo(UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot){
-                dataSnapshot.getValue().toString();
                 ArrayList<HashMap<String,String>> data = (ArrayList<HashMap<String,String>>) dataSnapshot.getValue();
                 dataArray = data;
                 initialiseSpinner();
