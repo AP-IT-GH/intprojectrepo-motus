@@ -112,6 +112,40 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         if(dataArray!=null){
             if(dataArray.size()!=0){
                 drawGraph();
+                getInjuries();
+            }
+        }
+    }
+
+    private void getInjuries(){
+        if(dataArray.size()>10){
+            ArrayList<Double> datapoints = new ArrayList<>();
+            double y;
+            for(int i = 0;i<dataArray.size();i++){
+                if(dataArray.get(i)!=null){
+                    y = Double.parseDouble(dataArray.get(i).get(dataPoint1));
+                    //nieuw datapunt aanmaken en toevoegen aan de serie datapunten
+                    datapoints.add(y);
+                }
+            }
+            ArrayList<Integer> outliers = new ArrayList<>();
+            double movingAverage;
+            ArrayList<Double> outlierValues = new ArrayList<>();
+            for(int i = 5;i<datapoints.size()-5;i++){
+                movingAverage = 0;
+                for(int j = -5;i < 5;i++){
+                    movingAverage += datapoints.get(i+j);
+                }
+                movingAverage /= 10;
+                double difference = movingAverage - datapoints.get(i);
+                if(difference/datapoints.get(i)>0.1){
+                    outliers.add(i);
+                    outlierValues.add(movingAverage);
+                }
+            }
+            for(int i = 0;i<outliers.size();i++){
+                Log.d(TAG,"pointnr: " + outliers.get(i) + " is an outlier with real value: " + datapoints.get(outliers.get(i)));
+                Log.d(TAG,"expected value: " + outlierValues.get(i));
             }
         }
     }
