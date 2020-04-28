@@ -65,11 +65,9 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
 
         mUser = FirebaseAuth.getInstance().getCurrentUser();
         UID = mUser.getUid();
-        Log.d(TAG,UID);
         DBData = findViewById(R.id.liveData);
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         dataRef = database.getReference(DatabaseDataReference);
-        Log.d(TAG,dataRef.toString());
         currRef = dataRef;
         currRef.orderByChild("uid").equalTo(UID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
