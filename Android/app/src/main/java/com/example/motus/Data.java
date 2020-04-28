@@ -3,6 +3,8 @@ package com.example.motus;
 public class Data {
     private String Time;
     private  String Angle;
+    //added code
+    private  String Movement;
 
     public String getUid() {
         return Uid;
@@ -14,10 +16,13 @@ public class Data {
 
     private String Uid;
     public Data(){}
-    public  Data(String time, String angle, String uid){
-    Time = time;
-    Angle = angle;
-    Uid = uid;
+    public  Data(String time, String angle, String uid, String movement){
+        Time = time;
+        Angle = angle;
+        Uid = uid;
+
+        //added code
+        Movement= movement;
     }
 
     public String getTime() {
@@ -28,6 +33,9 @@ public class Data {
         return Angle;
     }
 
+    //added code
+    public String getMovement(){ return  Movement;}
+
     public void setTime(String time) {
         Time = time;
     }
@@ -35,4 +43,7 @@ public class Data {
     public void setAngle(String angle) {
         Angle = angle;
     }
+
+    //added code
+    public void setMovement(String movement){Movement = movement;}
 }

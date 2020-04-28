@@ -1,8 +1,8 @@
 package com.example.motus;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -12,6 +12,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.appcompat.app.AlertDialog;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -19,22 +21,74 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.UUID;
+
 public class MeasuringActivity extends NavigationMenu {
     private static final String LOG_TAG = MainActivity.class.getSimpleName();
     private FirebaseDatabase database = FirebaseDatabase.getInstance();
     private FirebaseAuth mAuth;
     boolean connected = true;
     int teller = 0;
+    //55072829-bc9e-4c53-938a-74a6d4c78776 uuid voor eps32
+//00001101-0000-1000-8000-00805F9B34FB
+
+    static final UUID mUUID = UUID.fromString("55072829-bc9e-4c53-938a-74a6d4c78776");
+    private ArrayList<Character> recievedata;
+    private char b;
+    private  String string;
+    private String[] splitData;
+    private ArrayList<String> Angle;
+    private ArrayList<String > Time;
+    private ArrayList<String> Movement;
+    Data data = new Data();
+    LoginActivity SendData = new LoginActivity();
+
+    BluetoothSocket btSocket = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
+        System.out.println("devices:" + btAdapter.getBondedDevices());
+
+        mAuth = FirebaseAuth.getInstance();
+
+/// print alle verbonden toestellen
+//  FC:F5:C4:54:E0:1E address
+        //98:D3:31:FD:17:D6
+        BluetoothDevice hc05 = btAdapter.getRemoteDevice("FC:F5:C4:54:E0:1E");
+        System.out.println(hc05.getName());
+
+        // starten van de socket
+        int counter = 0;
+        do {
+            try {
+                btSocket = hc05.createRfcommSocketToServiceRecord(mUUID);
+                System.out.println("sokcet start " + btSocket);
+                btSocket.connect();
+                System.out.println("connection status: " + btSocket.isConnected());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            counter++;
+        } while (!btSocket.isConnected() && counter < 3);
+
+        if (btSocket.isConnected() == false){
+            BuildDialog();
+        }
+
+        Meassure();
+
         LayoutInflater inflater = (LayoutInflater) this
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View contentView = inflater.inflate(R.layout.activity_measuring, null, false);
         drawer.addView(contentView, 0);
 
-        mAuth = FirebaseAuth.getInstance();
 
         final Button cancelMeasurement = findViewById(R.id.stop_measuring_button);
         cancelMeasurement.setOnClickListener(new View.OnClickListener() {
@@ -48,9 +102,6 @@ public class MeasuringActivity extends NavigationMenu {
         CheckInjuries();
         teller =0;
 
-        if (!connected) {
-            BuildDialog();
-        }
     }
 
     public void EndMeasuring(View view) {
@@ -104,8 +155,8 @@ public class MeasuringActivity extends NavigationMenu {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                for (int i = 1; i < 10; i++) {
-                    String name = dataSnapshot.child(Integer.toString(i)).child("name").getValue().toString();
+                for (int i=0;i<9;i++) {
+                    //String name = dataSnapshot.child(Integer.toString(i)).child("name").getValue().toString();
                     if (dataSnapshot.child(Integer.toString(i)).hasChild("users")) {
                         for (DataSnapshot dataSnapshot2 : dataSnapshot.child(Integer.toString(i)).child("users").getChildren()) {
                             try {
@@ -139,5 +190,74 @@ public class MeasuringActivity extends NavigationMenu {
     public void ShowResults() {
         Intent intent = new Intent(this, GetDataActivity.class);
         startActivity(intent);
+    }
+
+    public void Meassure(){
+        //schrijven naar toestel
+        try {
+            OutputStream outputStream = btSocket.getOutputStream();
+            outputStream.write(48);
+            System.out.println("bericht verzonden");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        InputStream inputStream = null;
+
+        try {
+            inputStream = btSocket.getInputStream();
+
+            recievedata = new ArrayList<>();
+            do {
+
+                b = (char) inputStream.read();
+                recievedata.add(b);
+                // System.out.println(recievedata);
+
+
+                if (b == ';') {
+
+                    string = new String((String.valueOf(recievedata)).replace(";", ""));
+                    string = string.replace(",", "");
+                    //importeren van klassen en dan naar databank sturen
+                    recievedata.clear();
+                    System.out.println(string);
+
+                    splitData = string.split(" ");
+                    System.out.println(string);
+
+                    Movement.add(splitData[1]);
+                    Angle.add(splitData[2]);
+                    Time.add(splitData[3]);
+
+                }
+
+                //System.out.println();
+                if (b == '&')
+                    break;
+
+                //breken van de loop !!!
+            } while (b > 0);
+
+            btSocket.close();
+            System.out.println("loop gebroken");
+
+            //send data to database
+            sendData();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendData() {
+
+        for (int i = 0; i < Angle.size(); i++) {
+            data.setAngle(Angle.get(i));
+            data.setTime(Time.get(i));
+            data.setMovement(Movement.get(i));
+            SendData.sendMessage();
+        }
     }
 }

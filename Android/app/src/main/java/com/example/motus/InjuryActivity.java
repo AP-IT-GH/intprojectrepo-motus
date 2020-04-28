@@ -116,7 +116,7 @@ private Button btnInjuries;
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     // This method is called once with the initial value and again
                     // whenever data at this location is updated.
-                    for (int i=1;i<10;i++) {
+                    for (int i=0;i<9;i++) {
                         String category = dataSnapshot.child(Integer.toString(i)).child("category").getValue().toString();
                         if (category.toLowerCase().equals(selectedItem.toLowerCase())) {
                             String name = dataSnapshot.child(Integer.toString(i)).child("name").getValue().toString();
@@ -139,7 +139,7 @@ private Button btnInjuries;
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                for (int i=1;i<10;i++) {
+                for (int i=0;i<9;i++) {
                     String name = dataSnapshot.child(Integer.toString(i)).child("name").getValue().toString();
                     if (name.toLowerCase().equals(selectedItem.toLowerCase())) {
                         String description = dataSnapshot.child(Integer.toString(i)).child("description").getValue().toString();
@@ -163,7 +163,7 @@ private Button btnInjuries;
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                for (int i=1;i<10;i++) {
+                for (int i=0;i<9;i++) {
                     String name = dataSnapshot.child(Integer.toString(i)).child("name").getValue().toString();
                     if(name.toLowerCase().equals(selectedItem.toLowerCase())) {
                         if(dataSnapshot.child(Integer.toString(i)).hasChild("users")) {
@@ -198,7 +198,7 @@ private Button btnInjuries;
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                for (int i=1;i<10;i++) {
+                for (int i=0;i<9;i++) {
                     String name = dataSnapshot.child(Integer.toString(i)).child("name").getValue().toString();
                     if (name.toLowerCase().equals(selectedItem.toLowerCase())) {
                         if (!dataSnapshot.child(Integer.toString(i)).child("users").child(mAuth.getCurrentUser().getUid()).exists()) {
@@ -226,7 +226,7 @@ private Button btnInjuries;
             public void onDataChange(DataSnapshot dataSnapshot) {
                 // This method is called once with the initial value and again
                 // whenever data at this location is updated.
-                for (int i=1;i<10;i++) {
+                for (int i=0;i<9;i++) {
                     String name = dataSnapshot.child(Integer.toString(i)).child("name").getValue().toString();
                     if (name.toLowerCase().equals(selectedItem.toLowerCase())) {
                         if (dataSnapshot.child(Integer.toString(i)).child("users").child(mAuth.getCurrentUser().getUid()).exists()) {

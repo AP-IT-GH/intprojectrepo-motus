@@ -216,7 +216,7 @@ public class LoginActivity extends NavigationMenu {
         });
     }
 
-    private void sendMessage(){
+    public void sendMessage(){
         data.setAngle("45");
         data.setTime("0.1");
         newRefMessage.addValueEventListener(new ValueEventListener() {
