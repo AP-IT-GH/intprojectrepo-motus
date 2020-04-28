@@ -176,15 +176,32 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
             double movingAverage;
             ArrayList<Double> outlierValues = new ArrayList<>();
             for(int i = 5;i<datapoints.size()-5;i++){
-                movingAverage = 0;
-                for(int j = -5;j < 5;j++){
-                    movingAverage += datapoints.get(i+j);
-                }
-                movingAverage /= 10;
-                double difference = movingAverage - datapoints.get(i);
-                if(difference/datapoints.get(i)>0.4){
-                    outliers.add(i);
-                    outlierValues.add(movingAverage);
+                if(datapoints.get(i-5)<datapoints.get(i)){
+                    if(datapoints.get(i+5)>datapoints.get(i)){
+                        movingAverage = 0;
+                        for(int j = -5;j < 5;j++){
+                            movingAverage += datapoints.get(i+j);
+                        }
+                        movingAverage /= 10;
+                        double difference = movingAverage - datapoints.get(i);
+                        if(difference/datapoints.get(i)>0.1){
+                            outliers.add(i);
+                            outlierValues.add(movingAverage);
+                        }
+                    }
+                }else if(datapoints.get(i-5)>datapoints.get(i)){
+                    if(datapoints.get(i+5)<datapoints.get(i)){
+                        movingAverage = 0;
+                        for(int j = -5;j < 5;j++){
+                            movingAverage += datapoints.get(i+j);
+                        }
+                        movingAverage /= 10;
+                        double difference = movingAverage - datapoints.get(i);
+                        if(difference/datapoints.get(i)>0.1){
+                            outliers.add(i);
+                            outlierValues.add(movingAverage);
+                        }
+                    }
                 }
             }
             for(int i = 0;i<outliers.size();i++){
