@@ -32,6 +32,8 @@ private TextView txtDescription;
 private Button btnInjuries;
     private FirebaseAuth mAuth;
 
+    int Teller1 = 0;
+    int Teller2 = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,8 +89,10 @@ private Button btnInjuries;
                 String name = injuryList.get(position).getItem();
                 if(btnInjuries.getText().equals("Remove injury")){
                     removeInjury(name);
+                    Teller2 =0;
                 }else if(btnInjuries.getText().equals("Add injury")){
                     addInjury(name);
+                    Teller1 = 0;
                     Toast.makeText(InjuryActivity.this, name, Toast.LENGTH_SHORT).show();
                 }
             }
@@ -197,9 +201,13 @@ private Button btnInjuries;
                 for (int i=1;i<10;i++) {
                     String name = dataSnapshot.child(Integer.toString(i)).child("name").getValue().toString();
                     if (name.toLowerCase().equals(selectedItem.toLowerCase())) {
-                            if (!dataSnapshot.child(Integer.toString(i)).child("users").child(mAuth.getCurrentUser().getUid()).exists()) {
+                        if (!dataSnapshot.child(Integer.toString(i)).child("users").child(mAuth.getCurrentUser().getUid()).exists()) {
+                            if (Teller1 <1)
+                            {
                                 myRef.child(Integer.toString(i)).child("users").child(mAuth.getCurrentUser().getUid()).child("name").setValue(mAuth.getCurrentUser().getDisplayName());
                             }
+                            Teller1 = Teller1 +1;
+                        }
                     }
                 }
             }
@@ -222,7 +230,11 @@ private Button btnInjuries;
                     String name = dataSnapshot.child(Integer.toString(i)).child("name").getValue().toString();
                     if (name.toLowerCase().equals(selectedItem.toLowerCase())) {
                         if (dataSnapshot.child(Integer.toString(i)).child("users").child(mAuth.getCurrentUser().getUid()).exists()) {
-                            myRef.child(Integer.toString(i)).child("users").child(mAuth.getCurrentUser().getUid()).removeValue();
+                            if (Teller2 <1)
+                            {
+                                myRef.child(Integer.toString(i)).child("users").child(mAuth.getCurrentUser().getUid()).removeValue();
+                            }
+                            Teller2 = Teller2 +1;
                         }
                     }
                 }
