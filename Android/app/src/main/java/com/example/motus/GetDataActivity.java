@@ -182,7 +182,7 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
                 }
                 movingAverage /= 10;
                 double difference = movingAverage - datapoints.get(i);
-                if(difference/datapoints.get(i)>0.1){
+                if(difference/datapoints.get(i)>0.4){
                     outliers.add(i);
                     outlierValues.add(movingAverage);
                 }
@@ -215,16 +215,16 @@ public class GetDataActivity extends AppCompatActivity implements OnItemSelected
         series = new LineGraphSeries<>();
 
         // activate horizontal zooming and scrolling
-        graph.getViewport().setScalable(true);
+        //graph.getViewport().setScalable(true);
 
         // activate horizontal scrolling
-        //graph.getViewport().setScrollable(true);
+        graph.getViewport().setScrollable(true);
 
         // activate horizontal and vertical zooming and scrolling
-        graph.getViewport().setScalableY(true);
+        //graph.getViewport().setScalableY(true);
 
         // activate vertical scrolling
-        //graph.getViewport().setScrollableY(true);
+        graph.getViewport().setScrollableY(true);
 
         //een vooraf bepaald aantal datapunten
         int numDataPoints = 100;
